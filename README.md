@@ -3,15 +3,13 @@ This is a repository to help me track my [GNU Emacs](https://www.gnu.org/softwar
 
 ## License information
 
-----------
-
 Copyright 2016 Bas Bossink.  
 bas.bossink@gmail.com  
 &lt;<http://basbossink.github.com/>&gt;
 
-The full license can by found in [LICENSE.md](https://github.com/basbossink/emacs-configuration/raw/master/LICENSE.md "License")
+The full license can by found in [LICENSE.md](https://raw.githubusercontent.com/basbossink/emacs-configuration/master/LICENSE.md "License")
 
-----------
+----
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
