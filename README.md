@@ -7,7 +7,7 @@ Copyright 2016 Bas Bossink.
 bas.bossink@gmail.com  
 &lt;<http://basbossink.github.com/>&gt;
 
-The full license can by found in [LICENSE.md](https://raw.githubusercontent.com/basbossink/emacs-configuration/master/LICENSE.md "License")
+The full license can by found in [LICENSE.md](https://github.com/basbossink/emacs-configuration/blob/master/LICENSE.md "License")
 
 ----
 
