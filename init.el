@@ -14,7 +14,7 @@
  '(magit-log-section-arguments (quote ("--graph" "--decorate" "-n256")))
  '(package-selected-packages
    (quote
-    (editorconfig toml-mode rust-mode ripgrep sml-mode yaml-mode powershell elm-mode hydra ggtags web-mode company-jedi company-anaconda auto-complete yasnippet json-mode ace-window discover-my-major sift evil smartparens pt fsharp-mode markdown-mode csharp-mode magit iy-go-to-char ledger-mode solarized-theme))))
+    (tide editorconfig toml-mode rust-mode ripgrep sml-mode yaml-mode powershell elm-mode hydra ggtags web-mode company-jedi company-anaconda auto-complete yasnippet json-mode ace-window discover-my-major sift evil smartparens pt fsharp-mode markdown-mode csharp-mode magit iy-go-to-char ledger-mode solarized-theme))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

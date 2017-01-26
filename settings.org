@@ -1,6 +1,6 @@
 * Package repositories setup
-#+BEGIN_SRC emacs-lisp
-  (require 'package)
+#+begin_src emacs-lisp :tangle yes
+(require 'package)
   ;;(add-to-list
   ;;  'package-archives
   ;;  '("melpa-stable" . "https://stable.melpa.org/packages/")
@@ -13,13 +13,12 @@
     'package-archives
     '("melpa" . "https://melpa.org/packages/")
     t)
-  (unless package-archive-contents (package-refresh-contents))
   (package-initialize)
-#+END_SRC
+  (unless package-archive-contents (package-refresh-contents))
+#+end_src
 * Keybindings
 ** iy-go-to-char
 #+begin_src emacs-lisp :tangle yes
-;;; iy-go-to-char
 (add-to-list 'load-path "~/.emacs.d/iy-go-to-char")
 (require 'iy-go-to-char)
 (global-set-key (kbd "C-c f") 'iy-go-to-char)
@@ -28,7 +27,6 @@
 (global-set-key (kbd "C-c T") 'iy-go-up-to-char-backward)
 (global-set-key (kbd "C-c ;") 'iy-go-to-or-up-to-continue)
 (global-set-key (kbd "C-c ,") 'iy-go-to-or-up-to-continue-backward)
-
 #+end_src
 ** org-mode
 #+begin_src emacs-lisp :tangle yes
@@ -54,10 +52,10 @@
 (global-set-key (kbd "M-o a") 'ace-window)
 (global-set-key (kbd "M-o M-a") 'ace-window)
 #+end_src
-** Sift searching
+** ripgrep searching
 #+begin_src emacs-lisp :tangle yes
-(global-set-key (kbd "C-S-f") 'sift-regexp)
-(global-set-key (kbd "<f6>") 'sift-regexp-cs)
+(global-set-key (kbd "C-S-f") 'ripgrep-regexp)
+(global-set-key (kbd "<f6>") 'ripgrep-regexp-cs)
 #+end_src
 ** Kill other buffers
 #+begin_src emacs-lisp :tangle yes
@@ -201,7 +199,6 @@ _o_ther buffers: %s(my/number-names my/last-buffers)
 #+end_src
 *** Add symbola as unicode font
 #+begin_src emacs-lisp :tangle yes
-;; specify font for all unicode characters
 (when (member "Symbola" (font-family-list))
   (set-fontset-font t 'unicode "Symbola" nil 'prepend))
 #+end_src
@@ -328,14 +325,12 @@ _o_ther buffers: %s(my/number-names my/last-buffers)
 #+begin_src emacs-lisp :tangle yes
 (setq sentence-end-double-space nil)
 #+end_src
-** Backup settings
+** Backup settings; store all backup and autosave files in the tmp directory
 #+begin_src emacs-lisp :tangle yes
-;; store all backup and autosave files in the tmp dir
 (setq backup-directory-alist
       `((".*" . ,temporary-file-directory)))
 (setq auto-save-file-name-transforms
             `((".*" ,temporary-file-directory t)))
-
 #+end_src
 ** Use emacs server
 #+begin_src emacs-lisp :tangle yes
@@ -409,12 +404,24 @@ _o_ther buffers: %s(my/number-names my/last-buffers)
             (define-key yas/keymap [tab] 'yas/next-field)))
 
 #+end_src
+** Set up files to include in agenda
+#+begin_src emacs-lisp :tangle yes
+(setq org-agenda-files (mapcar (lambda (f) (expand-file-name (concat "~/Dropbox/Personal/journals/" f))) '("2017.org" "divverence.org")))
+#+end_src
 * Time tracking
 #+begin_src emacs-lisp :tangle yes
-;;; time tracking
 (require 'timeclock)
+#+end_src
+** Add timeclock to modeline
+#+begin_src emacs-lisp :tangle yes
 (timeclock-modeline-display)
+#+end_src
+** Ask to clock out when emacs closes
+#+begin_src emacs-lisp :tangle yes
 (add-hook 'kill-emacs-query-functions 'timeclock-query-out)
+#+end_src
+** Define a custom function to handle interruptions
+#+begin_src emacs-lisp :tangle yes
 (defun timeclock-interruption ()
   "Provide administiring an interuption with a single key stroke."
   (interactive)
@@ -427,8 +434,8 @@ _o_ther buffers: %s(my/number-names my/last-buffers)
 #+begin_src emacs-lisp :tangle yes
 (setq magit-log-margin '(t "%Y-%m-%dT%H:%M:%S %z" 47 t 20))
 #+end_src
+*** Load magit
 #+begin_src emacs-lisp :tangle yes
-;;; magit
 (require 'magit)
 #+end_src
 ** Gitflow
@@ -465,10 +472,9 @@ have to be set to *numberp* values
 #+end_src
 * Programming language modes
 ** C#
-*** Hooks
+*** Hooks; enable electric pair mode
 #+begin_src emacs-lisp :tangle yes
 (defun my-csharp-mode-hook ()
-  ;; enable the stuff you want for C# here
   (electric-pair-mode 1))
 (add-hook 'csharp-mode-hook 'my-csharp-mode-hook)
 #+end_src
@@ -486,7 +492,6 @@ have to be set to *numberp* values
 ** F#
 *** Initialize
 #+begin_src emacs-lisp :tangle yes
-;;; fsharp-mode
 (require 'fsharp-mode)
 #+end_src
 *** Indentation
@@ -509,6 +514,43 @@ have to be set to *numberp* values
 *** Enable format on save
 #+begin_src emacs-lisp :tangle yes
 (add-hook 'rust-mode-hook #'rust-format-on-save)
+#+end_src
+** TypeScript
+*** Mode hook function
+#+begin_src emacs-lisp :tangle yes
+(defun setup-tide-mode ()
+  (interactive)
+  (tide-setup)
+  (flycheck-mode +1)
+  (setq flycheck-check-syntax-automatically '(save mode-enabled))
+  (eldoc-mode +1)
+  (tide-hl-identifier-mode +1)
+  (company-mode +1))
+#+end_src
+*** Align annotation to the right hand side
+#+begin_src emacs-lisp :tangle yes
+(setq company-tooltip-align-annotations t)
+#+end_src
+*** Format the buffer before saving
+#+begin_src emacs-lisp :tangle yes
+(add-hook 'before-save-hook 'tide-format-before-save)
+#+end_src
+*** Add mode hook
+#+begin_src emacs-lisp :tangle yes
+(add-hook 'typescript-mode-hook #'setup-tide-mode)
+#+end_src
+*** Set format options
+#+begin_src emacs-lisp :tangle yes
+(setq tide-format-options '(:insertSpaceAfterFunctionKeywordForAnonymousFunctions t :placeOpenBraceOnNewLineForFunctions))
+#+end_src
+*** Enable tide for tsx files
+#+begin_src emacs-lisp :tangle yes
+(require 'web-mode)
+(add-to-list 'auto-mode-alist '("\\.tsx\\'" . web-mode))
+(add-hook 'web-mode-hook
+          (lambda ()
+            (when (string-equal "tsx" (file-name-extension buffer-file-name))
+              (setup-tide-mode))))
 #+end_src
 ** Programming mode hooks
 *** Remove trailing whitespace
@@ -575,13 +617,12 @@ have to be set to *numberp* values
 (editorconfig-mode 1)
 #+end_src
 * Custom functions
-** Sift through C# files only
+** Ripgrep through C# files only
 #+begin_src emacs-lisp :tangle yes
-(defun sift-regexp-cs (regexp dir)
+(defun ripgrep-regexp-cs (regexp dir)
   (interactive "sRegex: \nDDirectory: ")
-  (sift-regexp regexp dir '("-x" "cs")))
+  (ripgrep-regexp regexp dir '("-t" "cs")))
 #+end_src
-
 ** Kill all other buffers
 #+begin_src emacs-lisp :tangle yes
 (defun kill-other-buffers ()
