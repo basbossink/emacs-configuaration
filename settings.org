@@ -88,6 +88,15 @@ the melpa entry below with:
 #+begin_src emacs-lisp :tangle yes
 (global-set-key (kbd "<f5>") 'revert-buffer-without-confirm)
 #+end_src
+** Dired
+#+begin_src emacs-lisp :tangle yes
+  (eval-after-load
+      "dired"
+    '(define-key dired-mode-map
+       [f3] (lambda ()
+              (interactive)
+              (w32-browser (dired-replace-in-string "/" "\\" (dired-get-filename))))))
+#+end_src
 ** Hydra's
 *** Zoom in-out
 #+begin_src emacs-lisp :tangle yes
@@ -645,51 +654,58 @@ have to be set to *numberp* values
 (editorconfig-mode 1)
 #+end_src
 * Custom functions
-** Ripgrep through C# files only
+** Hooks
+** Other functions
+*** Ripgrep through C# files only
 #+begin_src emacs-lisp :tangle yes
-(defun ripgrep-regexp-cs (regexp dir)
-  (interactive "sRegex: \nDDirectory: ")
-  (ripgrep-regexp regexp dir '("-t" "cs")))
+  (defun ripgrep-regexp-cs (regexp dir)
+    (interactive "sRegex: \nDDirectory: ")
+    (ripgrep-regexp regexp dir '("-t" "cs")))
 #+end_src
-** Kill all other buffers
+*** Kill all other buffers
 #+begin_src emacs-lisp :tangle yes
-(defun kill-other-buffers ()
-  "Kill all other buffers."
-  (interactive)
-  (mapc 'kill-buffer (delq (current-buffer) (buffer-list))))
-
+ (defun kill-other-buffers ()
+   "Kill all other buffers."
+   (interactive)
+   (mapc 'kill-buffer (delq (current-buffer) (buffer-list))))
 #+end_src
-** Revert buffer without confirmation
+*** Revert buffer without confirmation
 #+begin_src emacs-lisp :tangle yes
-(defun revert-buffer-without-confirm ()
-  "Revert the current buffer without asking for a confirmation."
-  (interactive)
-  (revert-buffer t t t))
+ (defun revert-buffer-without-confirm ()
+   "Revert the current buffer without asking for a confirmation."
+   (interactive)
+   (revert-buffer t t t))
 #+end_src
-** Toggle window split between horizontal and vertical
+*** Toggle window split between horizontal and vertical
 #+begin_src emacs-lisp :tangle yes
-(defun toggle-window-split ()
-  (interactive)
-  (if (= (count-windows) 2)
-      (let* ((this-win-buffer (window-buffer))
-         (next-win-buffer (window-buffer (next-window)))
-         (this-win-edges (window-edges (selected-window)))
-         (next-win-edges (window-edges (next-window)))
-         (this-win-2nd (not (and (<= (car this-win-edges)
-                     (car next-win-edges))
-                     (<= (cadr this-win-edges)
-                     (cadr next-win-edges)))))
-         (splitter
-          (if (= (car this-win-edges)
-             (car (window-edges (next-window))))
-          'split-window-horizontally
-        'split-window-vertically)))
-    (delete-other-windows)
-    (let ((first-win (selected-window)))
-      (funcall splitter)
-      (if this-win-2nd (other-window 1))
-      (set-window-buffer (selected-window) this-win-buffer)
-      (set-window-buffer (next-window) next-win-buffer)
-      (select-window first-win)
-      (if this-win-2nd (other-window 1))))))
+ (defun toggle-window-split ()
+   (interactive)
+   (if (= (count-windows) 2)
+       (let* ((this-win-buffer (window-buffer))
+          (next-win-buffer (window-buffer (next-window)))
+          (this-win-edges (window-edges (selected-window)))
+          (next-win-edges (window-edges (next-window)))
+          (this-win-2nd (not (and (<= (car this-win-edges)
+                      (car next-win-edges))
+                      (<= (cadr this-win-edges)
+                      (cadr next-win-edges)))))
+          (splitter
+           (if (= (car this-win-edges)
+              (car (window-edges (next-window))))
+           'split-window-horizontally
+         'split-window-vertically)))
+     (delete-other-windows)
+     (let ((first-win (selected-window)))
+       (funcall splitter)
+       (if this-win-2nd (other-window 1))
+       (set-window-buffer (selected-window) this-win-buffer)
+       (set-window-buffer (next-window) next-win-buffer)
+       (select-window first-win)
+       (if this-win-2nd (other-window 1))))))
+#+end_src
+*** Open file based on windows extension
+#+begin_src emacs-lisp :tangle yes
+  (defun w32-browser
+    (doc)
+    (w32-shell-execute 1 doc))
 #+end_src
