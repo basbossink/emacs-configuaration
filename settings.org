@@ -465,7 +465,6 @@ _o_ther buffers: %s(my/number-names my/last-buffers)
 #+begin_src emacs-lisp :tangle yes
 (add-to-list 'load-path "~/.emacs.d/ssh-agency")
 (require 'ssh-agency)
-;;(setenv "SSH_ASKPASS" "git-gui--askpass")
 #+end_src
 ** Log parameters
 #+begin_src emacs-lisp :tangle yes
