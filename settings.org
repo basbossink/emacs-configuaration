@@ -214,11 +214,12 @@ _o_ther buffers: %s(my/number-names my/last-buffers)
 #+end_src
 ** Tide
 #+begin_src emacs-lisp :tangle yes
+(defun tide-mode-map-customizations ()
 (define-key tide-mode-map (kbd "S-<f12>") 'tide-references)
 (define-key tide-mode-map (kbd "C-r r") 'tide-rename-symbol)
 (define-key tide-mode-map (kbd "C-S-b") 'tide-project-errors)
 (define-key tide-mode-map (kbd "<M-return>") 'tide-fix)
-(define-key tide-mode-map (kbd "<f1>") 'tide-documentation-at-point)
+(define-key tide-mode-map (kbd "<f1>") 'tide-documentation-at-point))
 #+end_src
 * Custom variables
 ** Look and feel
@@ -464,7 +465,7 @@ _o_ther buffers: %s(my/number-names my/last-buffers)
 #+begin_src emacs-lisp :tangle yes
 (add-to-list 'load-path "~/.emacs.d/ssh-agency")
 (require 'ssh-agency)
-(setenv "SSH_ASKPASS" "git-gui--askpass")
+;;(setenv "SSH_ASKPASS" "git-gui--askpass")
 #+end_src
 ** Log parameters
 #+begin_src emacs-lisp :tangle yes
@@ -537,6 +538,7 @@ have to be set to *numberp* values
 (defun setup-tide-mode ()
   (interactive)
   (tide-setup)
+  (tide-mode-map-customizations)
   (flycheck-mode +1)
   (setq flycheck-check-syntax-automatically '(save mode-enabled))
   (eldoc-mode +1)
