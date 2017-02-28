@@ -35,6 +35,7 @@ the melpa entry below with:
 ** org-mode
 #+begin_src emacs-lisp :tangle yes
 (global-set-key (kbd "C-c l") 'org-store-link)
+(global-set-key (kbd "C-c a t") 'org-todo-list)
 #+end_src
 ** Time tracking
 #+begin_src emacs-lisp :tangle yes
@@ -210,6 +211,14 @@ _o_ther buffers: %s(my/number-names my/last-buffers)
    ("f" (ido-find-file) "find file")
    ("p" (find-file-at-point) "find file at point")
    ("o"  (ido-find-file-other-window) "find file other window")))
+#+end_src
+** Tide
+#+begin_src emacs-lisp :tangle yes
+(define-key tide-mode-map (kbd "S-<f12>") 'tide-references)
+(define-key tide-mode-map (kbd "C-r r") 'tide-rename-symbol)
+(define-key tide-mode-map (kbd "C-S-b") 'tide-project-errors)
+(define-key tide-mode-map (kbd "<M-return>") 'tide-fix)
+(define-key tide-mode-map (kbd "<f1>") 'tide-documentation-at-point)
 #+end_src
 * Custom variables
 ** Look and feel
