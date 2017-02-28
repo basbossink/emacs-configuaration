@@ -365,26 +365,6 @@ _o_ther buffers: %s(my/number-names my/last-buffers)
 #+end_src
 ** Environment changes
 *** Modify paths to a number of executables
-*** Add find and diff to the exec-path
-#+begin_src emacs-lisp :tangle yes
-(setq exec-path
-      (cons
-       (expand-file-name "~/PortableApps/find/bin")
-       (cons (expand-file-name "~/PortableApps/find/libexec")
-             (cons (expand-file-name "~/PortableApps/diffutils/bin") exec-path))))
-#+end_src
-*** Set find executable
-#+begin_src emacs-lisp :tangle yes
-(setq find-program (expand-file-name "~/PortableApps/find/bin/find.exe"))
-#+end_src
-*** Set ispell executable to use to Aspell
-#+begin_src emacs-lisp :tangle yes
-(setq ispell-program-name "C:\\Program Files (x86)\\Aspell\\bin\\aspell.exe")
-#+end_src
-*** Set ledger executable to use
-#+begin_src emacs-lisp :tangle yes
-(setq ledger-binary-path "C:\\Users\\user\\PortableApps\\ledger\\ledger.exe")
-#+end_src
 * Org mode configuration
 ** Set auto fill mode for org mode files
 #+begin_src emacs-lisp :tangle yes
