@@ -569,11 +569,6 @@ have to be set to *numberp* values
             (when (string-equal "tsx" (file-name-extension buffer-file-name))
               (setup-tide-mode))))
 #+end_src
-*** Flycheck-mode for tslint set executable
-#+begin_src emacs-lisp :tangle yes
-(custom-set-variables
- '(flycheck-typescript-tslint-executable "~/projects/ipseity/src/UserAccountCreation/nodejs/node_modules/.bin/tslint"))
-#+end_src
 ** Programming mode hooks
 *** Remove trailing whitespace
 #+begin_src emacs-lisp :tangle yes
