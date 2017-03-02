@@ -316,6 +316,10 @@ _o_ther buffers: %s(my/number-names my/last-buffers)
 #+begin_src emacs-lisp :tangle yes
 (set-language-environment "UTF-8")
 #+end_src
+*** Disable echo in shell buffer
+#+begin_src emacs-lisp :tangle yes
+(setq comint-process-echoes t)
+#+end_src
 ** Timetracking
 *** Set timelog file
 #+begin_src emacs-lisp :tangle yes
@@ -468,8 +472,10 @@ _o_ther buffers: %s(my/number-names my/last-buffers)
 #+end_src
 ** Log parameters
 #+begin_src emacs-lisp :tangle yes
-(if (not (member "--graph" magit-log-arguments))
-   (add-to-list "--graph" magit-log-arguments))
+  (mapcar (lambda (arg)
+            (if (not (member arg magit-log-arguments))
+                (add-to-list arg  magit-log-arguments)))
+          '("--graph" "--decorate" "-n256"))
 #+end_src
 ** Commit hook setup
 #+begin_src emacs-lisp :tangle yes
