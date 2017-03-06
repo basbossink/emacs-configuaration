@@ -467,8 +467,9 @@ _o_ther buffers: %s(my/number-names my/last-buffers)
 #+end_src
 ** SSH authentication
 #+begin_src emacs-lisp :tangle yes
-(add-to-list 'load-path "~/.emacs.d/ssh-agency")
-(require 'ssh-agency)
+(require 'exec-path-from-shell)
+(exec-path-from-shell-copy-env "SSH_AGENT_PID")
+(exec-path-from-shell-copy-env "SSH_AUTH_SOCK")
 #+end_src
 ** Log parameters
 #+begin_src emacs-lisp :tangle yes
@@ -481,6 +482,8 @@ _o_ther buffers: %s(my/number-names my/last-buffers)
 #+begin_src emacs-lisp :tangle yes
 (defun my-git-commit-setup-hook ()
   (progn (electric-pair-mode 1)
+         (exec-path-from-shell-copy-env "SSH_AGENT_PID")
+         (exec-path-from-shell-copy-env "SSH_AUTH_SOCK")
          (git-commit-turn-on-flyspell)
          (git-commit-turn-on-auto-fill)))
 (add-hook 'git-commit-setup-hook 'my-git-commit-setup-hook)
