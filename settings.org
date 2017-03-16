@@ -221,6 +221,26 @@ _o_ther buffers: %s(my/number-names my/last-buffers)
 (define-key tide-mode-map (kbd "<M-return>") 'tide-fix)
 (define-key tide-mode-map (kbd "<f1>") 'tide-documentation-at-point))
 #+end_src
+** Expand region
+#+begin_src emacs-lisp :tangle yes
+(require 'expand-region)
+(define-key prog-mode-map (kbd "C-=") 'er/expand-region)
+#+end_src
+** Smart forward
+(add-to-list 'load-path "~/.emacs.d/smart-forward")
+(require 'smart-forward)
+(define-key prog-mode-map (kbd "M-<up>") 'smart-up)
+(define-key prog-mode-map (kbd "M-<down>") 'smart-down)
+(define-key prog-mode-map (kbd "M-<left>") 'smart-backward)
+(define-key prog-mode-map (kbd "M-<right>") 'smart-forward)
+** JsRefactor
+#+begin_src emacs-lisp :tangle yes
+(js2r-add-keybindings-with-prefix "C-c C-m")
+#+end_src
+** Sort lines
+#+begin_src emacs-lisp :tangle yes
+(global-set-key (kbd "C-c M-s") 'sort-lines)
+#+end_src
 * Custom variables
 ** Look and feel
 *** Set default font
@@ -567,7 +587,11 @@ have to be set to *numberp* values
 #+end_src
 *** Set format options
 #+begin_src emacs-lisp :tangle yes
-(setq tide-format-options '(:insertSpaceAfterFunctionKeywordForAnonymousFunctions t :placeOpenBraceOnNewLineForFunctions))
+  (setq tide-format-options
+        '(:insertSpaceAfterFunctionKeywordForAnonymousFunctions t
+          :placeOpenBraceOnNewLineForFunctions nil
+          :indentSize 2
+          :tabSize 2))
 #+end_src
 *** Enable tide for tsx files
 #+begin_src emacs-lisp :tangle yes
@@ -577,6 +601,30 @@ have to be set to *numberp* values
           (lambda ()
             (when (string-equal "tsx" (file-name-extension buffer-file-name))
               (setup-tide-mode))))
+#+end_src
+** Javascript
+*** Enable js2 auto complete mode and refactor
+ #+begin_src emacs-lisp :tangle yes
+ (add-hook 'js-mode-hook 'js2-minor-mode)
+ (add-hook 'js2-mode-hook 'ac-js2-mode)
+(require 'js2-refactor)
+(add-hook 'js2-mode-hook #'js2-refactor-mode)
+ #+end_src
+*** Enable flycheck jshint
+#+begin_src emacs-lisp :tangle yes
+(require 'flycheck)
+(add-hook 'js-mode-hook
+          (lambda () (flycheck-mode t)))
+#+end_src
+** Web mode
+ #+begin_src emacs-lisp :tangle yes
+(require 'web-mode)
+(add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
+ #+end_src
+** Zen coding
+#+begin_src emacs-lisp :tangle yes
+(require 'zencoding-mode)
+(add-hook 'web-mode-hook 'zencoding-mode)
 #+end_src
 ** Programming mode hooks
 *** Remove trailing whitespace
@@ -651,6 +699,11 @@ have to be set to *numberp* values
 ** Editorconfig
 #+begin_src emacs-lisp :tangle yes
 (editorconfig-mode 1)
+#+end_src
+** Which key
+#+begin_src emacs-lisp :tangle yes
+(require 'which-key)
+(which-key-mode)
 #+end_src
 * Custom functions
 ** Hooks
