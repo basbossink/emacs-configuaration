@@ -241,6 +241,18 @@ _o_ther buffers: %s(my/number-names my/last-buffers)
 #+begin_src emacs-lisp :tangle yes
 (global-set-key (kbd "C-c M-s") 'sort-lines)
 #+end_src
+** Reformat with web-beautify
+#+begin_src emacs-lisp :tangle yes
+(eval-after-load 'web-mode
+  '(define-key web-mode-map (kbd "C-c b") 'web-beautify-html))
+
+(eval-after-load 'css-mode
+  '(define-key css-mode-map (kbd "C-c b") 'web-beautify-css))
+
+(eval-after-load 'js2-mode
+  '(define-key js2-mode-map (kbd "C-c b") 'web-beautify-js))
+
+#+end_src
 * Custom variables
 ** Look and feel
 *** Set default font
@@ -293,9 +305,9 @@ _o_ther buffers: %s(my/number-names my/last-buffers)
 #+begin_src emacs-lisp :tangle yes
 (setq solarized-scale-org-headlines nil)
 #+end_src
-**** Set theme to solarized dark
+**** Set theme to solarized light
 #+begin_src emacs-lisp :tangle yes
-(load-theme 'solarized-dark t)
+(load-theme 'solarized-light t)
 #+end_src
 *** Show column number in mode line
 #+begin_src emacs-lisp :tangle yes
@@ -605,10 +617,12 @@ have to be set to *numberp* values
 ** Javascript
 *** Enable js2 auto complete mode and refactor
  #+begin_src emacs-lisp :tangle yes
- (add-hook 'js-mode-hook 'js2-minor-mode)
- (add-hook 'js2-mode-hook 'ac-js2-mode)
-(require 'js2-refactor)
-(add-hook 'js2-mode-hook #'js2-refactor-mode)
+   (require 'js2-mode)
+   (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))
+   (add-to-list 'interpreter-mode-alist '("node" . js2-mode))
+   (add-hook 'js2-mode-hook 'ac-js2-mode)
+   (require 'js2-refactor)
+   (add-hook 'js2-mode-hook #'js2-refactor-mode)
  #+end_src
 *** Enable flycheck jshint
 #+begin_src emacs-lisp :tangle yes
@@ -635,6 +649,23 @@ have to be set to *numberp* values
              'write-file-functions
              'delete-trailing-whitespace)))
 #+end_src
+*** Format javascript/CSS/html on save
+#+begin_src emacs-lisp :tangle yes
+(eval-after-load 'js2-mode
+  '(add-hook 'js2-mode-hook
+             (lambda ()
+               (add-hook 'before-save-hook 'web-beautify-js-buffer t t))))
+(eval-after-load 'web-mode
+  '(add-hook 'web-mode-hook
+             (lambda ()
+               (add-hook 'before-save-hook 'web-beautify-html-buffer t t))))
+
+(eval-after-load 'css-mode
+  '(add-hook 'css-mode-hook
+             (lambda ()
+               (add-hook 'before-save-hook 'web-beautify-css-buffer t t))))
+#+end_src
+
 * Other minor modes
 ** ACE jump mode
 #+begin_src emacs-lisp :tangle yes
