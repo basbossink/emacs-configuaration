@@ -414,7 +414,7 @@ _o_ther buffers: %s(my/number-names my/last-buffers)
 * Org mode configuration
 ** Set auto fill mode for org mode files
 #+begin_src emacs-lisp :tangle yes
-(add-hook 'org-mode-hook 'auto-fill-mode)
+(add-hook 'org-mode-hook 'turn-on-auto-fill)
 #+end_src
 ** Babel
 *** Set active Babel languages
