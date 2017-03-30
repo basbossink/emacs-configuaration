@@ -398,6 +398,10 @@ _o_ther buffers: %s(my/number-names my/last-buffers)
 #+begin_src emacs-lisp :tangle yes
 (setq sentence-end-double-space nil)
 #+end_src
+*** Use primary as clipboard
+#+begin_src emacs-lisp :tangle yes
+(setq x-select-enable-primary 't)
+#+end_src
 ** Backup settings; store all backup and autosave files in the tmp directory
 #+begin_src emacs-lisp :tangle yes
 (setq backup-directory-alist
