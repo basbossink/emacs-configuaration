@@ -402,6 +402,14 @@ _o_ther buffers: %s(my/number-names my/last-buffers)
 #+begin_src emacs-lisp :tangle yes
 (setq x-select-enable-primary 't)
 #+end_src
+*** Align regexp should use spaces iso tabs
+#+begin_src emacs-lisp :tangle yes
+(defadvice align-regexp (around align-regexp-with-spaces)
+  "Never use tabs for alignment."
+  (let ((indent-tabs-mode nil))
+    ad-do-it))
+(ad-activate 'align-regexp)
+#+end_src
 ** Backup settings; store all backup and autosave files in the tmp directory
 #+begin_src emacs-lisp :tangle yes
 (setq backup-directory-alist
@@ -634,6 +642,12 @@ have to be set to *numberp* values
 (add-hook 'js-mode-hook
           (lambda () (flycheck-mode t)))
 #+end_src
+*** Set basic offset to 2 spaces
+#+begin_src emacs-lisp :tangle yes
+(setq-default js2-basic-offset 2)
+(setq javascript-indent-level 2)
+(setq js-indent-level 2)
+#+end_src
 ** Web mode
  #+begin_src emacs-lisp :tangle yes
 (require 'web-mode)
@@ -655,19 +669,20 @@ have to be set to *numberp* values
 #+end_src
 *** Format javascript/CSS/html on save
 #+begin_src emacs-lisp :tangle yes
-(eval-after-load 'js2-mode
-  '(add-hook 'js2-mode-hook
-             (lambda ()
-               (add-hook 'before-save-hook 'web-beautify-js-buffer t t))))
-(eval-after-load 'web-mode
-  '(add-hook 'web-mode-hook
-             (lambda ()
-               (add-hook 'before-save-hook 'web-beautify-html-buffer t t))))
+  (eval-after-load 'js2-mode
+    '(add-hook 'js2-mode-hook
+               (lambda ()
+                 (setq c-basic-offset 2)
+                 (add-hook 'before-save-hook 'web-beautify-js-buffer t t))))
+  (eval-after-load 'web-mode
+    '(add-hook 'web-mode-hook
+               (lambda ()
+                 (add-hook 'before-save-hook 'web-beautify-html-buffer t t))))
 
-(eval-after-load 'css-mode
-  '(add-hook 'css-mode-hook
-             (lambda ()
-               (add-hook 'before-save-hook 'web-beautify-css-buffer t t))))
+  (eval-after-load 'css-mode
+    '(add-hook 'css-mode-hook
+               (lambda ()
+                 (add-hook 'before-save-hook 'web-beautify-css-buffer t t))))
 #+end_src
 
 * Other minor modes
