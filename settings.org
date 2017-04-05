@@ -253,6 +253,12 @@ _o_ther buffers: %s(my/number-names my/last-buffers)
   '(define-key js2-mode-map (kbd "C-c b") 'web-beautify-js))
 
 #+end_src
+** Find word under cursor
+#+begin_src emacs-lisp :tangle yes
+  (require 'evil)
+  (global-set-key (kbd "C-*") 'evil-search-word-forward)
+  (global-set-key (kbd "C-#") 'evil-search-word-backward)
+#+end_src
 * Custom variables
 ** Look and feel
 *** Set default font
@@ -397,10 +403,6 @@ _o_ther buffers: %s(my/number-names my/last-buffers)
 *** Sentences end with a single space
 #+begin_src emacs-lisp :tangle yes
 (setq sentence-end-double-space nil)
-#+end_src
-*** Use primary as clipboard
-#+begin_src emacs-lisp :tangle yes
-(setq x-select-enable-primary 't)
 #+end_src
 *** Align regexp should use spaces iso tabs
 #+begin_src emacs-lisp :tangle yes
@@ -673,6 +675,8 @@ have to be set to *numberp* values
     '(add-hook 'js2-mode-hook
                (lambda ()
                  (setq c-basic-offset 2)
+                 (modify-syntax-entry ?_ "w")
+                 (modify-syntax-entry ?- "w")
                  (add-hook 'before-save-hook 'web-beautify-js-buffer t t))))
   (eval-after-load 'web-mode
     '(add-hook 'web-mode-hook
