@@ -222,9 +222,12 @@ _o_ther buffers: %s(my/number-names my/last-buffers)
 (define-key tide-mode-map (kbd "<f1>") 'tide-documentation-at-point))
 #+end_src
 ** Expand region
+- Control = expands the region
+- Control Shift = contracts the region
 #+begin_src emacs-lisp :tangle yes
-(require 'expand-region)
-(define-key prog-mode-map (kbd "C-=") 'er/expand-region)
+  (require 'expand-region)
+  (define-key prog-mode-map (kbd "C-=") 'er/expand-region)
+  (define-key prog-mode-map (kbd "C-+") (kbd "C-u - 1 C-="))
 #+end_src
 ** Smart forward
 (add-to-list 'load-path "~/.emacs.d/smart-forward")
@@ -412,6 +415,13 @@ _o_ther buffers: %s(my/number-names my/last-buffers)
     ad-do-it))
 (ad-activate 'align-regexp)
 #+end_src
+*** Copy content of the system clipboard to the kill ring before performing a kill in Emacs
+Save whatever’s in the current (system) clipboard before
+replacing it with the Emacs’ text.
+[[https://github.com/dakrone/eos/blob/master/eos.org][See here]] for details.
+#+begin_src emacs-lisp :tangle yes
+(setq save-interprogram-paste-before-kill t)
+#+end_src
 ** Backup settings; store all backup and autosave files in the tmp directory
 #+begin_src emacs-lisp :tangle yes
 (setq backup-directory-alist
@@ -431,6 +441,11 @@ _o_ther buffers: %s(my/number-names my/last-buffers)
 (add-hook 'org-mode-hook 'turn-on-auto-fill)
 #+end_src
 ** Babel
+*** Paths for interpreters
+#+begin_src emacs-lisp :tangle yes
+(setq org-plantuml-jar-path (expand-file-name "~/bin/plantuml.jar"))
+(setq org-babel-R-command (expand-file-name "~/Documents/R/R-3.3.1/bin/x64/R.exe --slave --no-save"))
+#+end_src
 *** Set active Babel languages
 #+begin_src emacs-lisp :tangle yes
 (org-babel-do-load-languages
@@ -443,11 +458,6 @@ _o_ther buffers: %s(my/number-names my/last-buffers)
    (dot . t)
    (ditaa . t)
    ))
-#+end_src
-*** Paths for interpreters
-#+begin_src emacs-lisp :tangle yes
-(setq org-plantuml-jar-path (expand-file-name "~/PortableApps/plantuml/plantuml.jar"))
-(setq org-babel-R-command (expand-file-name "~/Documents/R/R-3.3.1/bin/x64/R.exe --slave --no-save"))
 #+end_src
 ** Set org mode preference variables
 #+begin_src emacs-lisp :tangle yes
@@ -474,6 +484,11 @@ _o_ther buffers: %s(my/number-names my/last-buffers)
 ** Set up files to include in agenda
 #+begin_src emacs-lisp :tangle yes
 (setq org-agenda-files (mapcar (lambda (f) (expand-file-name (concat "~/Dropbox/Personal/journals/" f))) '("2017.org" "divverence.org")))
+#+end_src
+** Set up org-mode export for reveal.js presentations
+#+begin_src emacs-lisp :tangle yes
+(require 'ox-reveal)
+(setq org-reveal-root "file:///home/bas/projects/reveal.js")
 #+end_src
 * Time tracking
 #+begin_src emacs-lisp :tangle yes
@@ -671,6 +686,7 @@ have to be set to *numberp* values
 #+end_src
 *** Format javascript/CSS/html on save
 #+begin_src emacs-lisp :tangle yes
+
   (eval-after-load 'js2-mode
     '(add-hook 'js2-mode-hook
                (lambda ()
@@ -758,6 +774,46 @@ have to be set to *numberp* values
 #+begin_src emacs-lisp :tangle yes
 (require 'which-key)
 (which-key-mode)
+#+end_src
+** Auto-fill mode
+*** Enable auto-fill mode for text mode
+#+begin_src emacs-lisp :tangle yes
+(add-hook 'text-mode-hook 'turn-on-auto-fill)
+#+end_src
+*** Enable auto-fill mode for yaml mode
+#+begin_src emacs-lisp :tangle yes
+(add-hook 'yaml-mode-hook 'turn-on-auto-fill)
+#+end_src
+*** Show auto-fill column
+#+begin_src emacs-lisp :tangle yes
+(require 'fill-column-indicator)
+(add-hook 'auto-fill-mode-hook 'fci-mode)
+#+end_src
+** SQL mode
+*** Login defaults
+#+begin_src emacs-lisp :tangle yes
+(setq sql-postgres-login-params
+      '((user :default "postgres")
+        (database :default "postgres")
+        (server :default "localhost")
+        (port :default 5432)))
+#+end_src
+*** Don't truncate lines of the query output
+#+begin_src emacs-lisp :tangle yes
+(add-hook 'sql-interactive-mode-hook
+          (lambda ()
+            (toggle-truncate-lines t)))
+#+end_src
+** Hungry delete
+#+begin_src emacs-lisp :tangle yes
+  (require 'hungry-delete)
+  (global-hungry-delete-mode)
+#+end_src
+** Aggressive indent mode
+#+begin_src emacs-lisp :tangle yes
+  (global-aggressive-indent-mode 1)
+  (add-to-list 'aggressive-indent-excluded-modes 'org-mode)
+  (add-to-list 'aggressive-indent-excluded-modes 'python-mode)
 #+end_src
 * Custom functions
 ** Hooks
