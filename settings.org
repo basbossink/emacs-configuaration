@@ -262,6 +262,14 @@ _o_ther buffers: %s(my/number-names my/last-buffers)
   (global-set-key (kbd "C-*") 'evil-search-word-forward)
   (global-set-key (kbd "C-#") 'evil-search-word-backward)
 #+end_src
+** Browse kill-ring
+#+begin_src emacs-lisp :tangle yes
+(global-set-key (kbd "C-c k") 'browse-kill-ring)
+#+end_src
+** Org journal
+#+begin_src emacs-lisp :tangle yes
+(global-set-key (kbd "C-c C-g") 'org-journal-new-entry)
+#+end_src
 * Custom variables
 ** Look and feel
 *** Set default font
@@ -490,6 +498,16 @@ replacing it with the Emacs’ text.
 (require 'ox-reveal)
 (setq org-reveal-root "file:///home/bas/projects/reveal.js")
 #+end_src
+** Org journal mode
+*** Initialize
+#+begin_src emacs-lisp :tangle yes
+(require 'org-journal)
+#+end_src
+*** Set preferences
+#+begin_src emacs-lisp :tangle yes
+  (setq org-journal-dir (expand-file-name "~/Dropbox/Personal/journals/2017"))
+  (setq org-journal-date-format "%A, %Y%m%d")
+#+end_src
 * Time tracking
 #+begin_src emacs-lisp :tangle yes
 (require 'timeclock)
@@ -674,6 +692,7 @@ have to be set to *numberp* values
 #+begin_src emacs-lisp :tangle yes
 (require 'zencoding-mode)
 (add-hook 'web-mode-hook 'zencoding-mode)
+(add-hook 'html-mode-hook 'zencoding-mode)
 #+end_src
 ** Programming mode hooks
 *** Remove trailing whitespace
@@ -725,7 +744,11 @@ have to be set to *numberp* values
 ** YASnippet
 *** Enable globally
 #+begin_src emacs-lisp :tangle yes
-(yas-global-mode 1)
+  (setq yas-snippet-dirs
+        '("~/.emacs.d/snippets"                 ;; personal snippets
+          "~/.emacs.d/elpa/yasnippet-20170518.1753/snippets"))
+  (yas-global-mode 1)
+
 #+end_src
 ** Completion
 *** Company mode
@@ -750,6 +773,9 @@ have to be set to *numberp* values
 #+end_src
 **** Enable globally
 #+begin_src emacs-lisp :tangle yes
+(setq ido-enable-flex-matching t)
+(setq ido-everywhere t)
+(setq ido-create-new-buffer 'always)
 (ido-mode t)
 #+end_src
 ** Abbreviations
@@ -815,8 +841,26 @@ have to be set to *numberp* values
   (add-to-list 'aggressive-indent-excluded-modes 'org-mode)
   (add-to-list 'aggressive-indent-excluded-modes 'python-mode)
 #+end_src
+** Major mode icons
+#+begin_src emacs-lisp :tangle yes
+(mode-icons-mode)
+#+end_src
+** Sudo support
+#+begin_src emacs-lisp :tangle yes
+  (require 'sudo-edit)
+#+end_src
 * Custom functions
 ** Hooks
+#+begin_src emacs-lisp :tangle yes
+  (add-hook 'js-mode-hook
+            (lambda ()
+              (tern-mode t)
+              (auto-complete-mode t)))
+  (eval-after-load 'tern
+     '(progn
+        (require 'tern-auto-complete)
+        (tern-ac-setup)))
+#+end_src
 ** Other functions
 *** Ripgrep through C# files only
 #+begin_src emacs-lisp :tangle yes
