@@ -3,8 +3,8 @@ This is a repository to help me track my [GNU Emacs](https://www.gnu.org/softwar
 
 ## License information
 
-Copyright 2016 Bas Bossink.  
-bas.bossink@gmail.com  
+Copyright 2016 Bas Bossink.
+bas.bossink@gmail.com
 &lt;<http://basbossink.github.com/>&gt;
 
 The full license can by found in [LICENSE.md](https://github.com/basbossink/emacs-configuration/blob/master/LICENSE.md "License")

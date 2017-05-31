@@ -1,83 +1,35 @@
-* Package repositories setup
-To use the stable melpa packages replace
-the melpa entry below with:
-#+begin_src emacs-lisp :tangle no
-(add-to-list
-  'package-archives
-  '("melpa-stable" . "https://stable.melpa.org/packages/")
-  t)
-#+end_src
-#+begin_src emacs-lisp :tangle yes
-(require 'package)
-  (add-to-list
-   'package-archives
-   '("org" . "http://orgmode.org/elpa/")
-   t)
-  (add-to-list
-    'package-archives
-    '("melpa" . "https://melpa.org/packages/")
-    t)
-  (package-initialize)
-  (unless package-archive-contents (package-refresh-contents))
-#+end_src
-* Keybindings
-** iy-go-to-char
-#+begin_src emacs-lisp :tangle yes
-(add-to-list 'load-path "~/.emacs.d/iy-go-to-char")
-(require 'iy-go-to-char)
-(global-set-key (kbd "C-c f") 'iy-go-to-char)
-(global-set-key (kbd "C-c F") 'iy-go-to-char-backward)
-(global-set-key (kbd "C-c t") 'iy-go-up-to-char)
-(global-set-key (kbd "C-c T") 'iy-go-up-to-char-backward)
-(global-set-key (kbd "C-c ;") 'iy-go-to-or-up-to-continue)
-(global-set-key (kbd "C-c ,") 'iy-go-to-or-up-to-continue-backward)
-#+end_src
 ** org-mode
 #+begin_src emacs-lisp :tangle yes
-(global-set-key (kbd "C-c l") 'org-store-link)
-#+end_src
-** Time tracking
-#+begin_src emacs-lisp :tangle yes
-(global-set-key [f10] 'timeclock-in)
-(global-set-key [f11] 'timeclock-out)
-(global-set-key [f12] 'timeclock-interruption)
+  (use-package org
+;;          :bind (("C-c l") . org-store-link)
+          :config 
+          (setq org-confirm-babel-evaluate nil)
+          (setq org-pretty-entities t)
+          (setq org-export-with-sub-superscripts nil))
 #+end_src
 ** Magit
 #+begin_src emacs-lisp :tangle yes
-(global-set-key (kbd "C-x g") 'magit-status)
-#+end_src
-** Discover my major mode
-#+begin_src emacs-lisp :tangle yes
-(global-set-key (kbd "C-h C-m") 'discover-my-major)
-(global-set-key (kbd "C-h M-m") 'discover-my-mode)
+(use-package magit
+	:ensure t
+	:bind (("C-x g" . magit-status)))
 #+end_src
 ** ACE window
 #+begin_src emacs-lisp :tangle yes
-(global-set-key (kbd "M-o a") 'ace-window)
-(global-set-key (kbd "M-o M-a") 'ace-window)
-#+end_src
-** ACE jump buffer
-#+begin_src emacs-lisp :tangle yes
-(global-set-key (kbd "M-o M-b") (lambda () (interactive) (ace-jump-buffer)))
-(global-set-key (kbd "M-o b") (lambda () (interactive) (ace-jump-buffer)))
+(use-package ace-window
+	:ensure t
+	:bind (("M-o a" . ace-window)))
 #+end_src
 ** ACE jump mode
 #+begin_src emacs-lisp :tangle yes
-(define-key global-map (kbd "C-c C-SPC") 'ace-jump-mode)
-#+end_src
-*** ACE jump zap to char
-#+begin_src emacs-lisp :tangle yes
-(global-set-key (kbd "M-p M-f") 'ace-jump-zap-to-char)
-(global-set-key (kbd "M-p M-t") 'ace-jump-zap-up-to-char)
+(use-package ace-jump-mode
+	:ensure t
+	:bind (("C-c C-SPC" . ace-jump-mode)))
 #+end_src
 ** ripgrep searching
 #+begin_src emacs-lisp :tangle yes
-(global-set-key (kbd "C-S-f") 'ripgrep-regexp)
-(global-set-key (kbd "<f6>") 'ripgrep-regexp-cs)
-#+end_src
-** Kill other buffers
-#+begin_src emacs-lisp :tangle yes
-(global-set-key (kbd "C-c C-w") 'kill-other-buffers)
+(use-package ripgrep
+	:ensure t
+	:bind (("C-S-f" . ripgrep-reqexp)))
 #+end_src
 ** Jump to next and previous error like VS
 #+begin_src emacs-lisp :tangle yes
@@ -88,154 +40,19 @@ the melpa entry below with:
 #+begin_src emacs-lisp :tangle yes
 (global-set-key (kbd "<f5>") 'revert-buffer-without-confirm)
 #+end_src
-** Dired
-#+begin_src emacs-lisp :tangle yes
-  (eval-after-load
-      "dired"
-    '(define-key dired-mode-map
-       [f3] (lambda ()
-              (interactive)
-              (w32-browser (dired-replace-in-string "/" "\\" (dired-get-filename))))))
-#+end_src
-** Hydra's
-*** Zoom in-out
-#+begin_src emacs-lisp :tangle yes
-(defhydra hydra-zoom-in (global-map "C-x C-+")
-  "zoom"
-  ("+" text-scale-increase "in")
-  ("-" text-scale-decrease "out"))
-
-(defhydra hydra-zoom-out (global-map "C-x C--")
-  "zoom"
-  ("+" text-scale-increase "in")
-  ("-" text-scale-decrease "out"))
-#+end_src
-*** Goto line
-#+begin_src emacs-lisp :tangle yes
-(defhydra hydra-goto-line (goto-map "")
-  "goto-line"
-  ("g" goto-line "go")
-  ("m" set-mark-command "mark" :bind nil)
-  ("q" nil "quit"))
-#+end_src
-*** Switch to buffer
-**** Helper functions
-#+begin_src emacs-lisp :tangle yes
-(defun my/name-of-buffers (n)
-  "Return the names of the first N buffers from `buffer-list'."
-  (let ((bns
-         (delq nil
-               (mapcar
-                (lambda (b)
-                  (unless (string-match "^ " (setq b (buffer-name b)))
-                    b))
-                (buffer-list)))))
-    (subseq bns 1 (min (1+ n) (length bns)))))
-
-;; Given ("a", "b", "c"), return "1. a, 2. b, 3. c".
-(defun my/number-names (list)
-  "Enumerate and concatenate LIST."
-  (let ((i 0))
-    (mapconcat
-     (lambda (x)
-       (format "%d. %s" (cl-incf i) x))
-     list
-     ", ")))
-
-(defvar my/last-buffers nil)
-
-(defun my/switch-to-buffer (arg)
-  (interactive "p")
-  (switch-to-buffer
-   (nth (1- arg) my/last-buffers)))
-
-(defun my/switch-to-buffer-other-window (arg)
-  (interactive "p")
-  (switch-to-buffer-other-window
-   (nth (1- arg) my/last-buffers)))
-#+end_src
 **** Keybinding
-#+begin_src emacs-lisp :tangle yes
-(global-set-key
- "\C-o"
- (defhydra my/switch-to-buffer (:exit t
-                                :body-pre (setq my/last-buffers
-                                                (my/name-of-buffers 4)))
-   "
-_o_ther buffers: %s(my/number-names my/last-buffers)
-
-"
-   ("o" my/switch-to-buffer "this window")
-   ("O" my/switch-to-buffer-other-window "other window")
-   ("<escape>" nil)))
-#+end_src
-*** Insert special characters
-**** Helper functions
-#+begin_src emacs-lisp :tangle yes
-(defun my/insert-unicode (unicode-name)
-       "Same as C-x 8 enter UNICODE-NAME."
-       (insert-char (cdr (assoc-string unicode-name (ucs-names)))))
-#+end_src
-**** Keybinding
-#+begin_src emacs-lisp :tangle yes
-(global-set-key
-  (kbd "C-x 9")
-  (defhydra hydra-unicode (:hint nil)
-   "
-        Unicode  _e_ €  _s_ ZERO WIDTH SPACE _c_ ©
-                 _f_ ♀  _o_ °   _m_ µ   _p_ ←
-                 _r_ ♂  _a_ →   _t_ η   _l_ 😊
-                 _d_ 👍
-        "
-   ("e" (my/insert-unicode "EURO SIGN"))
-   ("r" (my/insert-unicode "MALE SIGN"))
-   ("f" (my/insert-unicode "FEMALE SIGN"))
-   ("s" (my/insert-unicode "ZERO WIDTH SPACE"))
-   ("o" (my/insert-unicode "DEGREE SIGN"))
-   ("a" (my/insert-unicode "RIGHTWARDS ARROW"))
-   ("m" (my/insert-unicode "MICRO SIGN"))
-   ("t" (my/insert-unicode "GREEK SMALL LETTER ETA"))
-   ("p" (my/insert-unicode "LEFTWARDS ARROW"))
-   ("l" (my/insert-unicode "SMILING FACE WITH SMILING EYES"))
-   ("d" (my/insert-unicode "THUMBS UP SIGN"))
-   ("c" (my/insert-unicode "COPYRIGHT SIGN"))))
-#+end_src
-*** Find file
-#+begin_src emacs-lisp :tangle yes
-(global-set-key
- (kbd "C-x C-f")
- (defhydra my/find-file (:exit t
-                         :hint nil)
-   "find file"
-   ("f" (ido-find-file) "find file")
-   ("p" (find-file-at-point) "find file at point")
-   ("o"  (ido-find-file-other-window) "find file other window")))
-#+end_src
 * Custom variables
 ** Look and feel
-*** Set default font
+*** Set theme to solarized light
 #+begin_src emacs-lisp :tangle yes
-  (set-face-font
-    'default
-    "DejaVu Sans Mono-10:antialias=subpixel")
-  (set-face-attribute
-    'default nil :height 100)
-  (add-to-list
-    'default-frame-alist
-    '(font . "DejaVu Sans Mono-10:antialias=subpixel"))
-#+end_src
-*** Add symbola as unicode font
-#+begin_src emacs-lisp :tangle yes
-(when (member "Symbola" (font-family-list))
-  (set-fontset-font t 'unicode "Symbola" nil 'prepend))
+(use-package color-theme-sanityinc-solarized
+:ensure t
+:config 
+(load-theme 'sanityinc-solarized-light t))
 #+end_src
 *** Highlight matching parentheses
 #+begin_src emacs-lisp :tangle yes
 (show-paren-mode)
-#+end_src
-*** Disable the scrollbar
-#+begin_src emacs-lisp :tangle yes
-(scroll-bar-mode -1)
 #+end_src
 *** Disable the toolbar
 #+begin_src emacs-lisp :tangle yes
@@ -246,27 +63,6 @@ _o_ther buffers: %s(my/number-names my/last-buffers)
 (setq inhibit-startup-screen t)
 #+end_src
 *** Themes
-**** Set solarized related preferences before loading the theme
-***** Make the fringe stand out from the background
-#+begin_src emacs-lisp :tangle yes
-(setq solarized-distinct-fringe-background t)
-#+end_src
-***** Don't change the font for some headings and titles
-#+begin_src emacs-lisp :tangle yes
-(setq solarized-use-variable-pitch nil)
-#+end_src
-***** Make the modeline high contrast
-#+begin_src emacs-lisp :tangle yes
-(setq solarized-high-contrast-mode-line t)
-#+end_src
-***** Don't change size of org-mode headlines (but keep other size-changes)
-#+begin_src emacs-lisp :tangle yes
-(setq solarized-scale-org-headlines nil)
-#+end_src
-**** Set theme to solarized dark
-#+begin_src emacs-lisp :tangle yes
-(load-theme 'solarized-dark t)
-#+end_src
 *** Show column number in mode line
 #+begin_src emacs-lisp :tangle yes
 (column-number-mode t)
@@ -305,26 +101,6 @@ _o_ther buffers: %s(my/number-names my/last-buffers)
 *** Set language environment
 #+begin_src emacs-lisp :tangle yes
 (set-language-environment "UTF-8")
-#+end_src
-** Timetracking
-*** Set timelog file
-#+begin_src emacs-lisp :tangle yes
-  (setq timeclock-file (expand-file-name "~/Dropbox/Personal/journals/timelog"))
-#+end_src
-** Ledger
-*** Enable version check
-#+begin_src emacs-lisp :tangle yes
-(setq ledger-mode-should-check-version t)
-#+end_src
-*** Some shortcuts for a few reports
-#+begin_src emacs-lisp :tangle yes
-  (setq ledger-reports
-    (quote (
-       ("balance" "ledger balance")
-       ("bal" "ledger -f %(ledger-file) bal")
-       ("reg" "ledger -f %(ledger-file) reg")
-       ("payee" "ledger -f %(ledger-file) reg @%(payee)")
-       ("account" "ledger -f %(ledger-file) reg %(account)"))))
 #+end_src
 ** Editing
 *** Indentation
@@ -365,26 +141,6 @@ _o_ther buffers: %s(my/number-names my/last-buffers)
 #+end_src
 ** Environment changes
 *** Modify paths to a number of executables
-*** Add find and diff to the exec-path
-#+begin_src emacs-lisp :tangle yes
-(setq exec-path
-      (cons
-       (expand-file-name "~/PortableApps/find/bin")
-       (cons (expand-file-name "~/PortableApps/find/libexec")
-             (cons (expand-file-name "~/PortableApps/diffutils/bin") exec-path))))
-#+end_src
-*** Set find executable
-#+begin_src emacs-lisp :tangle yes
-(setq find-program (expand-file-name "~/PortableApps/find/bin/find.exe"))
-#+end_src
-*** Set ispell executable to use to Aspell
-#+begin_src emacs-lisp :tangle yes
-(setq ispell-program-name "C:\\Program Files (x86)\\Aspell\\bin\\aspell.exe")
-#+end_src
-*** Set ledger executable to use
-#+begin_src emacs-lisp :tangle yes
-(setq ledger-binary-path "C:\\Users\\user\\PortableApps\\ledger\\ledger.exe")
-#+end_src
 * Org mode configuration
 ** Set auto fill mode for org mode files
 #+begin_src emacs-lisp :tangle yes
@@ -405,15 +161,8 @@ _o_ther buffers: %s(my/number-names my/last-buffers)
    ))
 #+end_src
 *** Paths for interpreters
-#+begin_src emacs-lisp :tangle yes
-(setq org-plantuml-jar-path (expand-file-name "~/PortableApps/plantuml/plantuml.jar"))
-(setq org-babel-R-command (expand-file-name "~/Documents/R/R-3.3.1/bin/x64/R.exe --slave --no-save"))
-#+end_src
 ** Set org mode preference variables
 #+begin_src emacs-lisp :tangle yes
-(setq org-confirm-babel-evaluate nil)
-(setq org-pretty-entities t)
-(setq org-export-with-sub-superscripts nil)
 #+end_src
 ** Make yasnippets and org-mode work together
 #+begin_src emacs-lisp :tangle yes
@@ -435,26 +184,6 @@ _o_ther buffers: %s(my/number-names my/last-buffers)
 #+begin_src emacs-lisp :tangle yes
 (setq org-agenda-files (mapcar (lambda (f) (expand-file-name (concat "~/Dropbox/Personal/journals/" f))) '("2017.org" "divverence.org")))
 #+end_src
-* Time tracking
-#+begin_src emacs-lisp :tangle yes
-(require 'timeclock)
-#+end_src
-** Add timeclock to modeline
-#+begin_src emacs-lisp :tangle yes
-(timeclock-modeline-display)
-#+end_src
-** Ask to clock out when emacs closes
-#+begin_src emacs-lisp :tangle yes
-(add-hook 'kill-emacs-query-functions 'timeclock-query-out)
-#+end_src
-** Define a custom function to handle interruptions
-#+begin_src emacs-lisp :tangle yes
-(defun timeclock-interruption ()
-  "Provide administiring an interuption with a single key stroke."
-  (interactive)
-  (timeclock-out "Interruption")
-  (timeclock-in 0 "Interruption" nil))
-#+end_src
 * Magit
 ** Initialize
 *** Set Log margin format before magit loads
@@ -465,18 +194,6 @@ _o_ther buffers: %s(my/number-names my/last-buffers)
 #+begin_src emacs-lisp :tangle yes
 (require 'magit)
 #+end_src
-** Gitflow
-#+begin_src emacs-lisp :tangle yes
-(add-to-list 'load-path "~/.emacs.d/magit-gitflow")
-(require 'magit-gitflow)
-(add-hook 'magit-mode-hook 'turn-on-magit-gitflow)
-#+end_src
-** SSH authentication
-#+begin_src emacs-lisp :tangle yes
-(add-to-list 'load-path "~/.emacs.d/ssh-agency")
-(require 'ssh-agency)
-(setenv "SSH_ASKPASS" "git-gui--askpass")
-#+end_src
 ** Log parameters
 #+begin_src emacs-lisp :tangle yes
 (if (not (member "--graph" magit-log-arguments))
@@ -485,8 +202,7 @@ _o_ther buffers: %s(my/number-names my/last-buffers)
 ** Commit hook setup
 #+begin_src emacs-lisp :tangle yes
 (defun my-git-commit-setup-hook ()
-  (progn (electric-pair-mode 1)
-         (git-commit-turn-on-flyspell)
+  (progn (git-commit-turn-on-flyspell)
          (git-commit-turn-on-auto-fill)))
 (add-hook 'git-commit-setup-hook 'my-git-commit-setup-hook)
 #+end_src
@@ -497,143 +213,17 @@ have to be set to *numberp* values
 (setq git-commit-fill-column 78)
 (setq-default git-commit-summary-max-length git-commit-fill-column)
 #+end_src
-* Programming language modes
-** C#
-*** Hooks; enable electric pair mode
-#+begin_src emacs-lisp :tangle yes
-(defun my-csharp-mode-hook ()
-  (electric-pair-mode 1))
-(add-hook 'csharp-mode-hook 'my-csharp-mode-hook)
-#+end_src
-** Markdown
-*** Use pandoc to compile markdown
-#+begin_src emacs-lisp :tangle yes
-(setq markdown-command "pandoc")
-#+end_src
-*** Disable removal of trailing whitespace
-#+begin_src emacs-lisp :tangle yes
-(defun turn-off-delete-trailing-whitespace ()
-  (setq write-file-functions nil))
-(add-hook 'markdown-mode-hook 'turn-off-delete-trailing-whitespace)
-#+end_src
-** F#
-*** Initialize
-#+begin_src emacs-lisp :tangle yes
-(require 'fsharp-mode)
-#+end_src
-*** Indentation
-#+begin_src emacs-lisp :tangle yes
-(setq fsharp-continuation-offset 2)
-(setq fsharp-indent-level 2)
-#+end_src
-** JSON
-*** Set indent width
-#+begin_src emacs-lisp :tangle yes
-(setq json-reformat:indent-width 2)
-#+end_src
-** Elm
-*** Hooks
-**** Use oracle for completion
-#+begin_src emacs-lisp :tangle yes
-(add-hook 'elm-mode-hook #'elm-oracle-setup-completion)
-#+end_src
-** Rust
-*** Enable format on save
-#+begin_src emacs-lisp :tangle yes
-(add-hook 'rust-mode-hook #'rust-format-on-save)
-#+end_src
-** TypeScript
-*** Mode hook function
-#+begin_src emacs-lisp :tangle yes
-(defun setup-tide-mode ()
-  (interactive)
-  (tide-setup)
-  (flycheck-mode +1)
-  (setq flycheck-check-syntax-automatically '(save mode-enabled))
-  (eldoc-mode +1)
-  (tide-hl-identifier-mode +1)
-  (company-mode +1))
-#+end_src
-*** Align annotation to the right hand side
-#+begin_src emacs-lisp :tangle yes
-(setq company-tooltip-align-annotations t)
-#+end_src
-*** Format the buffer before saving
-#+begin_src emacs-lisp :tangle yes
-(add-hook 'before-save-hook 'tide-format-before-save)
-#+end_src
-*** Add mode hook
-#+begin_src emacs-lisp :tangle yes
-(add-hook 'typescript-mode-hook #'setup-tide-mode)
-#+end_src
-*** Set format options
-#+begin_src emacs-lisp :tangle yes
-(setq tide-format-options '(:insertSpaceAfterFunctionKeywordForAnonymousFunctions t :placeOpenBraceOnNewLineForFunctions))
-#+end_src
-*** Enable tide for tsx files
-#+begin_src emacs-lisp :tangle yes
-(require 'web-mode)
-(add-to-list 'auto-mode-alist '("\\.tsx\\'" . web-mode))
-(add-hook 'web-mode-hook
-          (lambda ()
-            (when (string-equal "tsx" (file-name-extension buffer-file-name))
-              (setup-tide-mode))))
-#+end_src
-** Programming mode hooks
-*** Remove trailing whitespace
-#+begin_src emacs-lisp :tangle yes
-(add-hook 'prog-mode-hook
-          (lambda ()
-            (add-to-list
-             'write-file-functions
-             'delete-trailing-whitespace)))
-#+end_src
 * Other minor modes
 ** ACE jump mode
 #+begin_src emacs-lisp :tangle yes
-(autoload
-  'ace-jump-mode-pop-mark
-  "ace-jump-mode"
-  "Ace jump back:-)"
-  t)
-(eval-after-load "ace-jump-mode"
-  '(ace-jump-mode-enable-mark-sync))
-#+end_src
-** Smart parens
-#+begin_src emacs-lisp :tangle yes
-(require 'smartparens-config)
-(add-hook 'prog-mode-hook 'turn-on-smartparens-mode)
-(add-hook 'markdown-mode-hook 'turn-on-smartparens-mode)
 #+end_src
 ** YASnippet
 *** Enable globally
 #+begin_src emacs-lisp :tangle yes
-(yas-global-mode 1)
-#+end_src
-** Completion
-*** Company mode
-**** Enable globally
-#+begin_src emacs-lisp :tangle yes
-(add-hook 'after-init-hook 'global-company-mode)
-#+end_src
-**** Enable Python backend
-#+begin_src emacs-lisp :tangle yes
-(add-hook 'python-mode-hook 'anaconda-mode)
-(eval-after-load "company"
- '(add-to-list 'company-backends 'company-anaconda))
-#+end_src
-**** Enable Elm backend
-#+begin_src emacs-lisp :tangle yes
-(add-to-list 'company-backends 'company-elm)
-#+end_src
-*** IDO
-**** Initialize
-#+begin_src emacs-lisp :tangle yes
-(require 'ido)
-#+end_src
-**** Enable globally
-#+begin_src emacs-lisp :tangle yes
-(ido-mode t)
+(use-package yasnippet
+:ensure t
+:config
+(yas-global-mode 1))
 #+end_src
 ** Abbreviations
 *** Enable globally
@@ -649,63 +239,12 @@ have to be set to *numberp* values
 #+begin_src emacs-lisp :tangle yes
 (setq save-abbrevs t)
 #+end_src
-** Editorconfig
-#+begin_src emacs-lisp :tangle yes
-(editorconfig-mode 1)
-#+end_src
 * Custom functions
-** Hooks
 ** Other functions
-*** Ripgrep through C# files only
-#+begin_src emacs-lisp :tangle yes
-  (defun ripgrep-regexp-cs (regexp dir)
-    (interactive "sRegex: \nDDirectory: ")
-    (ripgrep-regexp regexp dir '("-t" "cs")))
-#+end_src
-*** Kill all other buffers
-#+begin_src emacs-lisp :tangle yes
- (defun kill-other-buffers ()
-   "Kill all other buffers."
-   (interactive)
-   (mapc 'kill-buffer (delq (current-buffer) (buffer-list))))
-#+end_src
 *** Revert buffer without confirmation
 #+begin_src emacs-lisp :tangle yes
  (defun revert-buffer-without-confirm ()
    "Revert the current buffer without asking for a confirmation."
    (interactive)
    (revert-buffer t t t))
-#+end_src
-*** Toggle window split between horizontal and vertical
-#+begin_src emacs-lisp :tangle yes
- (defun toggle-window-split ()
-   (interactive)
-   (if (= (count-windows) 2)
-       (let* ((this-win-buffer (window-buffer))
-          (next-win-buffer (window-buffer (next-window)))
-          (this-win-edges (window-edges (selected-window)))
-          (next-win-edges (window-edges (next-window)))
-          (this-win-2nd (not (and (<= (car this-win-edges)
-                      (car next-win-edges))
-                      (<= (cadr this-win-edges)
-                      (cadr next-win-edges)))))
-          (splitter
-           (if (= (car this-win-edges)
-              (car (window-edges (next-window))))
-           'split-window-horizontally
-         'split-window-vertically)))
-     (delete-other-windows)
-     (let ((first-win (selected-window)))
-       (funcall splitter)
-       (if this-win-2nd (other-window 1))
-       (set-window-buffer (selected-window) this-win-buffer)
-       (set-window-buffer (next-window) next-win-buffer)
-       (select-window first-win)
-       (if this-win-2nd (other-window 1))))))
-#+end_src
-*** Open file based on windows extension
-#+begin_src emacs-lisp :tangle yes
-  (defun w32-browser
-    (doc)
-    (w32-shell-execute 1 doc))
 #+end_src
