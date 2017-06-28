@@ -263,9 +263,9 @@ _o_ther buffers: %s(my/number-names my/last-buffers)
 #+begin_src emacs-lisp :tangle yes
 (setq solarized-scale-org-headlines nil)
 #+end_src
-**** Set theme to solarized dark
+**** Set theme to solarized light
 #+begin_src emacs-lisp :tangle yes
-(load-theme 'solarized-dark t)
+(load-theme 'solarized-light t)
 #+end_src
 *** Show column number in mode line
 #+begin_src emacs-lisp :tangle yes
@@ -352,6 +352,10 @@ _o_ther buffers: %s(my/number-names my/last-buffers)
 #+begin_src emacs-lisp :tangle yes
 (setq sentence-end-double-space nil)
 #+end_src
+*** Allow upcase region command
+#+begin_src emacs-lisp :tangle yes
+(put 'upcase-region 'disabled nil)
+#+end_src
 ** Backup settings; store all backup and autosave files in the tmp directory
 #+begin_src emacs-lisp :tangle yes
 (setq backup-directory-alist
@@ -365,26 +369,26 @@ _o_ther buffers: %s(my/number-names my/last-buffers)
 #+end_src
 ** Environment changes
 *** Modify paths to a number of executables
-*** Add find and diff to the exec-path
-#+begin_src emacs-lisp :tangle yes
-(setq exec-path
-      (cons
-       (expand-file-name "~/PortableApps/find/bin")
-       (cons (expand-file-name "~/PortableApps/find/libexec")
-             (cons (expand-file-name "~/PortableApps/diffutils/bin") exec-path))))
-#+end_src
-*** Set find executable
-#+begin_src emacs-lisp :tangle yes
-(setq find-program (expand-file-name "~/PortableApps/find/bin/find.exe"))
-#+end_src
-*** Set ispell executable to use to Aspell
-#+begin_src emacs-lisp :tangle yes
-(setq ispell-program-name "C:\\Program Files (x86)\\Aspell\\bin\\aspell.exe")
-#+end_src
-*** Set ledger executable to use
-#+begin_src emacs-lisp :tangle yes
-(setq ledger-binary-path "C:\\Users\\user\\PortableApps\\ledger\\ledger.exe")
-#+end_src
+**** Add find and diff to the exec-path
+ #+begin_src emacs-lisp :tangle yes
+ (setq exec-path
+       (cons
+        (expand-file-name "~/PortableApps/find/bin")
+        (cons (expand-file-name "~/PortableApps/find/libexec")
+              (cons (expand-file-name "~/PortableApps/diffutils/bin") exec-path))))
+ #+end_src
+**** Set find executable
+ #+begin_src emacs-lisp :tangle yes
+ (setq find-program (expand-file-name "~/PortableApps/find/bin/find.exe"))
+ #+end_src
+**** Set ispell executable to use to Aspell
+ #+begin_src emacs-lisp :tangle yes
+ (setq ispell-program-name "C:\\Program Files (x86)\\Aspell\\bin\\aspell.exe")
+ #+end_src
+**** Set ledger executable to use
+ #+begin_src emacs-lisp :tangle yes
+ (setq ledger-binary-path "C:\\Users\\bas\\PortableApps\\ledger\\ledger.exe")
+ #+end_src
 * Org mode configuration
 ** Set auto fill mode for org mode files
 #+begin_src emacs-lisp :tangle yes
@@ -578,6 +582,29 @@ have to be set to *numberp* values
           (lambda ()
             (when (string-equal "tsx" (file-name-extension buffer-file-name))
               (setup-tide-mode))))
+#+end_src
+** Web mode
+*** Enable web-mode for web-ish file types
+#+begin_src emacs-lisp :tangle yes
+(require 'web-mode)
+(add-to-list 'auto-mode-alist '("\\.phtml\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.tpl\\.php\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.[agj]sp\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.as[cp]x\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.erb\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.mustache\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.djhtml\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
+#+end_src
+*** Configure layouting
+#+begin_src emacs-lisp :tangle yes
+  (defun my-web-mode-hook ()
+    "Hooks for Web mode."
+    (setq web-mode-enable-auto-pairing t)
+    (setq web-mode-markup-indent-offset 2)
+    (setq web-mode-code-indent-offset 2)
+    (setq web-mode-css-indent-offset 2))
+  (add-hook 'web-mode-hook  'my-web-mode-hook)
 #+end_src
 ** Programming mode hooks
 *** Remove trailing whitespace
