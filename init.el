@@ -11,6 +11,7 @@
   (package-install 'use-package))
 (eval-when-compile
   (require 'use-package))
+(add-to-list 'load-path "~/.emacs.d/diminish")
 (require 'diminish)
 (require 'bind-key)
 
