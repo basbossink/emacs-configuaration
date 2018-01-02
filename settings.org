@@ -58,8 +58,7 @@
     :ensure t
     :commands (slime slime-lisp-mode-hook)
     :config
-    (dolist (element '(slime-fancy slime-fuzzy slime-repl))
-      (add-to-list 'slime-contribs element))
+    (add-to-list 'slime-contribs 'slime-fancy)
 
     (slime-setup)
     (add-hook 'slime-repl-mode-hook #'smartparens-strict-mode))
