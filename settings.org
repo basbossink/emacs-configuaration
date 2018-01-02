@@ -305,6 +305,7 @@ have to be set to *numberp* values
     (setq ac-fuzzy-enable t)
 
     (use-package ac-dabbrev
+      :ensure t
       :config
       (progn
         (add-to-list 'ac-sources 'ac-source-dabbrev)))
