@@ -111,13 +111,25 @@
 #+begin_src emacs-lisp :tangle yes
 (use-package go-eldoc
   :ensure t
-  :hook go-mode-hook)
+  :hook (go-mode-hook . go-eldoc-setup))
 #+end_src
 *** Go guru
 #+begin_src emacs-lisp :tangle yes
 (use-package go-guru
   :ensure t
   :hook (go-mode-hook . #'go-guru-hl-identifier-mode))
+#+end_src
+*** Go test
+#+begin_src emacs-lisp :tangle yes
+(use-package gotest
+  :ensure t
+  :bind (:map go-mode-map
+         ("C-x C-t f" . go-test-current-file)
+         ("C-x C-t t" . go-test-current-test)
+         ("C-x C-t p" . go-test-current-project)
+         ("C-x C-t b" . go-test-current-benchmark)
+         ("C-x C-t x" . go-run)))
+
 #+end_src
 * Custom variables
 ** Use y and n always
