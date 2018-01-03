@@ -41,6 +41,12 @@
 (global-set-key (kbd "<f5>") 'revert-buffer-without-confirm)
 #+end_src
 **** Keybinding
+** Use Flycheck for on the fly errors
+#+begin_src emacs-lisp :tangle yes
+(use-package flycheck
+  :ensure t
+  :init (global-flycheck-mode))
+#+end_src
 ** Programming language modes
 *** Lisp
 **** SLIME
@@ -80,6 +86,38 @@
 (use-package smartparens
   :ensure t)
 
+#+end_src
+*** Golang
+**** format on save, use goimports as gofmt
+#+begin_src emacs-lisp :tangle yes
+(use-package go-mode
+  :ensure t
+  :bind ("M-." . godef-jump)
+  :init
+  (progn
+    (setq gofmt-command "goimports")
+    (add-hook 'before-save-hook 'gofmt-before-save))
+  :config
+  (add-hook 'go-mode-hook 'electric-pair-mode))
+#+end_src
+**** Autocomplete
+#+begin_src emacs-lisp :tangle yes
+(use-package go-autocomplete
+  :ensure t
+  :hook
+  (go-mode-hook . (lambda () (auto-complete-mode 1))))
+#+end_src
+*** Go eldoc
+#+begin_src emacs-lisp :tangle yes
+(use-package go-eldoc
+  :ensure t
+  :hook go-mode-hook)
+#+end_src
+*** Go guru
+#+begin_src emacs-lisp :tangle yes
+(use-package go-guru
+  :ensure t
+  :hook (go-mode-hook . #'go-guru-hl-identifier-mode))
 #+end_src
 * Custom variables
 ** Use y and n always
@@ -193,7 +231,22 @@
 (server-mode)
 #+end_src
 ** Environment changes
-*** Modify paths to a number of executables
+*** Ensure environment propagates
+#+begin_src emacs-lisp :tangle yes
+(use-package exec-path-from-shell
+	:ensure t
+	:config
+        (progn
+          (dolist (element '("SSH_AGENT_PID" "SSH_AUTH_SOCK" "GOPATH"))
+                    (exec-path-from-shell-copy-env element))
+          (exec-path-from-shell-initialize)))
+#+end_src
+** Keybindings
+#+begin_src emacs-lisp :tangle yes
+(global-set-key (kbd "C-n") 'next-line)
+(global-set-key (kbd "C-p") 'previous-line)
+(global-set-key (kbd "<f12>") 'compile)
+#+end_src
 * Org mode configuration
 ** Set auto fill mode for org mode files
 #+begin_src emacs-lisp :tangle yes
@@ -238,16 +291,6 @@
 (setq org-agenda-files (mapcar (lambda (f) (expand-file-name (concat "~/Dropbox/Personal/journals/" f))) '("2017.org" "divverence.org")))
 #+end_src
 * Magit
-** Ensure ssh agent info propagates
-#+begin_src emacs-lisp :tangle yes
-(use-package exec-path-from-shell
-	:ensure t
-	:config
-        (progn
-          (exec-path-from-shell-copy-env "SSH_AGENT_PID")
-          (exec-path-from-shell-copy-env "SSH_AUTH_SOCK")
-          (exec-path-from-shell-initialize)))
-#+end_src
 ** Initialize
 *** Set Log margin format before magit loads
 #+begin_src emacs-lisp :tangle yes
@@ -277,6 +320,31 @@ have to be set to *numberp* values
 (setq-default git-commit-summary-max-length git-commit-fill-column)
 #+end_src
 * Other minor modes
+** IDO mode better mini buffer completion
+#+begin_src emacs-lisp :tangle yes
+(use-package ido
+  :init (progn
+          (ido-mode)
+          (ido-everywhere))
+  :config
+  (setq ido-enable-flex-matching t      ; Match characters if string doesn't
+                                        ; match
+        ido-create-new-buffer 'always   ; Create a new buffer if nothing matches
+        ido-use-filename-at-point 'guess
+        ;; Visit buffers and files in the selected window
+        ido-default-file-method 'selected-window
+        ido-default-buffer-method 'selected-window
+        ido-use-faces nil))             ; Prefer flx ido faces
+
+#+end_src
+*** Flexible matching for ido
+#+begin_src emacs-lisp :tangle yes
+(use-package flx-ido                    ; Flex matching for IDO
+  :ensure t
+  :init (flx-ido-mode))
+
+#+end_src
+
 ** Auto complete
 #+begin_src emacs-lisp :tangle yes
 (use-package auto-complete
@@ -311,6 +379,7 @@ have to be set to *numberp* values
 
     (setq ac-modes '(emacs-lisp-mode
                      lisp-mode
+                     go-mode
                      lisp-interaction-mode
                      slime-repl-mode))))
 #+end_src
