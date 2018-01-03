@@ -259,8 +259,6 @@
 #+end_src
 ** Keybindings
 #+begin_src emacs-lisp :tangle yes
-(global-set-key (kbd "C-n") 'next-line)
-(global-set-key (kbd "C-p") 'previous-line)
 (global-set-key (kbd "<f12>") 'compile)
 #+end_src
 * Org mode configuration
@@ -369,8 +367,6 @@ have to be set to *numberp* values
   :init
   (progn
     (auto-complete-mode t))
-  :bind (("C-n" . ac-next)
-         ("C-p" . ac-previous))
   :config
   (progn
     (use-package auto-complete-config)
