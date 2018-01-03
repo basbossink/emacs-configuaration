@@ -219,6 +219,10 @@
 #+begin_src emacs-lisp :tangle yes
 (setq sentence-end-double-space nil)
 #+end_src
+*** Set default language environment
+#+begin_src emacs-lisp :tangle yes
+(set-language-environment "UTF-8")
+#+end_src
 ** Backup settings; store all backup and autosave files in the tmp directory
 #+begin_src emacs-lisp :tangle yes
 (setq backup-directory-alist
