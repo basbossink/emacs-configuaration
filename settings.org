@@ -69,13 +69,11 @@
     (slime-setup)
     (add-hook 'slime-repl-mode-hook #'smartparens-strict-mode))
 
-  (add-hook 'emacs-lisp-mode-hook #'smartparens-strict-mode)
   (add-hook 'emacs-lisp-mode-hook #'turn-on-eldoc-mode)
   (add-hook 'emacs-lisp-mode-hook #'elisp-slime-nav-mode)
   (add-hook 'ielm-mode-hook #'elisp-slime-nav-mode)
   (add-hook 'ielm-mode-hook #'turn-on-eldoc-mode)
   (add-hook 'lisp-interaction-mode-hook #'turn-on-eldoc-mode)
-  (add-hook 'lisp-mode-hook #'smartparens-strict-mode)
   (add-hook 'lisp-mode-hook #'slime-lisp-mode-hook)
 
   (setq inferior-lisp-program "sbcl --dynamic-space-size 1024"))
@@ -85,6 +83,20 @@
 #+begin_src emacs-lisp :tangle yes
 (use-package smartparens
   :ensure t)
+
+#+end_src
+**** Paredit
+#+begin_src emacs-lisp :tangle yes
+(use-package paredit
+  :ensure t
+  :config
+  (add-hook 'emacs-lisp-mode-hook #'paredit-mode)
+  ;; enable in the *scratch* buffer
+  (add-hook 'lisp-interaction-mode-hook #'paredit-mode)
+  (add-hook 'ielm-mode-hook #'paredit-mode)
+  (add-hook 'lisp-mode-hook #'paredit-mode)
+  (add-hook 'eval-expression-minibuffer-setup-hook #'paredit-mode))
+
 
 #+end_src
 *** Golang
