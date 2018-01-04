@@ -108,6 +108,7 @@
   :init
   (progn
     (setq gofmt-command "goimports")
+    (setq tab-width 4)
     (add-hook 'before-save-hook 'gofmt-before-save))
   :config
   (add-hook 'go-mode-hook 'electric-pair-mode))
