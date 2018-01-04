@@ -111,7 +111,7 @@
     (add-hook 'before-save-hook 'gofmt-before-save))
   :config
   (add-hook 'go-mode-hook 'electric-pair-mode)
-  (add-hook 'go-mode-hook (lambda () (setq tab-width 4))))
+  (add-hook 'go-mode-hook (lambda () (setq tab-width 4) (setq indent-tabs-mode 1))))
 #+end_src
 **** Autocomplete
 #+begin_src emacs-lisp :tangle yes
