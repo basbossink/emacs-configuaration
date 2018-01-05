@@ -99,6 +99,11 @@
 
 
 #+end_src
+**** Snippets
+#+begin_src emacs-lisp :tangle yes
+(use-package common-lisp-snippets
+  :ensure t)
+#+end_src
 *** Golang
 **** format on save, use goimports as gofmt
 #+begin_src emacs-lisp :tangle yes
