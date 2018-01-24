@@ -75,6 +75,12 @@ the melpa entry below with:
 (global-set-key (kbd "C-S-f") 'ripgrep-regexp)
 (global-set-key (kbd "<f6>") 'ripgrep-regexp-cs)
 #+end_src
+** Search all occurrances
+#+begin_src emacs-lisp :tangle yes
+(global-set-key (kbd "C-c o") 'occur)
+(global-set-key (kbd "C-c O") 'multi-occur)
+#+end_src
+
 ** Kill other buffers
 #+begin_src emacs-lisp :tangle yes
 (global-set-key (kbd "C-c C-w") 'kill-other-buffers)
@@ -356,6 +362,20 @@ _o_ther buffers: %s(my/number-names my/last-buffers)
 #+begin_src emacs-lisp :tangle yes
 (put 'upcase-region 'disabled nil)
 #+end_src
+*** Inhibit eol conversion (see if this removes ^M chars)
+#+begin_src emacs-lisp :tangle no
+  (setq inhibit-eol-conversion t)
+#+end_src
+*** Set file encoding according to os (disable for investigating hangs)
+#+begin_src emacs-lisp :tangle no
+  (if (equal 'windows-nt system-type)
+      (progn (prefer-coding-system 'utf-8-dos)
+             (setq-default buffer-file-coding-system 'utf-8-dos)
+             (setf (alist-get "" file-coding-system-alist) '(utf-8-dos . utf-8-dos)))
+    (progn (prefer-coding-system 'utf-8-unix)
+           (setq-default buffer-file-coding-system 'utf-8-unix)
+           (setf (alist-get "" file-coding-system-alist) '(utf-8-unix . utf-8-unix))))
+#+end_src
 ** Backup settings; store all backup and autosave files in the tmp directory
 #+begin_src emacs-lisp :tangle yes
 (setq backup-directory-alist
@@ -390,11 +410,33 @@ _o_ther buffers: %s(my/number-names my/last-buffers)
  (setq ledger-binary-path "C:\\Users\\bas\\PortableApps\\ledger\\ledger.exe")
  #+end_src
 * Org mode configuration
+** Set custom exporters
+*** Confluence
+#+begin_src emacs-lisp :tangle yes
+  (require 'ox-confluence)
+#+end_src
+*** Markdown
+#+begin_src emacs-lisp :tangle yes
+  (require 'ox-md)
+#+end_src
+*** Groff
+#+begin_src emacs-lisp :tangle yes
+  (require 'ox-groff)
+#+end_src
+*** Man
+#+begin_src emacs-lisp :tangle yes
+  (require 'ox-man)
+#+end_src
 ** Set auto fill mode for org mode files
 #+begin_src emacs-lisp :tangle yes
 (add-hook 'org-mode-hook 'auto-fill-mode)
 #+end_src
 ** Babel
+*** Paths for interpreters
+#+begin_src emacs-lisp :tangle yes
+(setq org-plantuml-jar-path (expand-file-name "~/PortableApps/plantuml/plantuml.jar"))
+(setq org-babel-R-command (expand-file-name "~/Documents/R/R-3.3.1/bin/x64/R.exe --slave --no-save"))
+#+end_src
 *** Set active Babel languages
 #+begin_src emacs-lisp :tangle yes
 (org-babel-do-load-languages
@@ -407,11 +449,6 @@ _o_ther buffers: %s(my/number-names my/last-buffers)
    (dot . t)
    (ditaa . t)
    ))
-#+end_src
-*** Paths for interpreters
-#+begin_src emacs-lisp :tangle yes
-(setq org-plantuml-jar-path (expand-file-name "~/PortableApps/plantuml/plantuml.jar"))
-(setq org-babel-R-command (expand-file-name "~/Documents/R/R-3.3.1/bin/x64/R.exe --slave --no-save"))
 #+end_src
 ** Set org mode preference variables
 #+begin_src emacs-lisp :tangle yes
@@ -483,8 +520,9 @@ _o_ther buffers: %s(my/number-names my/last-buffers)
 #+end_src
 ** Log parameters
 #+begin_src emacs-lisp :tangle yes
-(if (not (member "--graph" magit-log-arguments))
-   (add-to-list "--graph" magit-log-arguments))
+(add-to-list "--graph" magit-log-arguments)
+(add-to-list "--decorate" magit-log-arguments)
+(add-to-list "-n256" magit-log-arguments)
 #+end_src
 ** Commit hook setup
 #+begin_src emacs-lisp :tangle yes
@@ -501,13 +539,33 @@ have to be set to *numberp* values
 (setq git-commit-fill-column 78)
 (setq-default git-commit-summary-max-length git-commit-fill-column)
 #+end_src
+* Mingus (MPD client)
+** Mode-line configuration
+#+begin_src emacs-lisp :tangle yes
+ (setq mingus-mode-line-show-consume-and-single-status nil)
+ (setq mingus-mode-line-show-elapsed-time t)
+ (setq mingus-mode-line-show-random-and-repeat-status nil)
+ (setq mingus-mode-line-show-status nil)
+ (setq mingus-mode-line-show-volume nil)
+ (setq mingus-mode-line-string-max 180)
+
+#+end_src
 * Programming language modes
 ** C#
 *** Hooks; enable electric pair mode
 #+begin_src emacs-lisp :tangle yes
-(defun my-csharp-mode-hook ()
-  (electric-pair-mode 1))
-(add-hook 'csharp-mode-hook 'my-csharp-mode-hook)
+  (defun my-csharp-mode-hook ()
+    (electric-pair-mode 1)
+    (omnisharp-mode)
+    (setq indent-tabs-mode nil)
+    (setq c-syntactic-indentation t)
+    (c-set-style "ellemtel")
+    (setq c-basic-offset 4)
+    (setq truncate-lines t)
+    (setq tab-width 4)
+    (setq evil-shift-width 4)
+    (local-set-key (kbd "C-c C-c") 'recompile))
+  (add-hook 'csharp-mode-hook 'my-csharp-mode-hook)
 #+end_src
 ** Markdown
 *** Use pandoc to compile markdown
@@ -615,6 +673,26 @@ have to be set to *numberp* values
              'write-file-functions
              'delete-trailing-whitespace)))
 #+end_src
+** Elixir Alchemist
+*** Setup paths to Elixir tools
+ #+begin_src emacs-lisp :tangle yes
+ (setq elixir-path "/ProgramData/chocolatey/lib/Elixir/bin/")
+ (setq alchemist-mix-command (concat elixir-path "mix"))
+ (setq alchemist-iex-program-name (concat elixir-path "iex"))
+ (setq alchemist-execute-command (concat elixir-path "elixir"))
+ (setq alchemist-compile-command (concat elixir-path "elixirc"))
+ #+end_src
+*** Hooks
+**** Run tests on save
+ #+begin_src emacs-lisp :tangle yes
+(setq alchemist-hooks-test-on-save t)
+ #+end_src
+** PowerShell
+*** Do not load profile to avoid interference from ssh-agent and posh-git
+  #+begin_src emacs-lisp :tangle yes
+  (setq explicit-powershell.exe-args  '("-NoProfile" "-Command" "-"))
+  #+end_src
+
 * Other minor modes
 ** ACE jump mode
 #+begin_src emacs-lisp :tangle yes
@@ -653,6 +731,12 @@ have to be set to *numberp* values
 #+begin_src emacs-lisp :tangle yes
 (add-to-list 'company-backends 'company-elm)
 #+end_src
+**** Enable Omnisharp backend
+#+begin_src emacs-lisp :tangle yes
+(eval-after-load
+ 'company
+ '(add-to-list 'company-backends 'company-omnisharp))
+#+end_src
 *** IDO
 **** Initialize
 #+begin_src emacs-lisp :tangle yes
@@ -680,6 +764,16 @@ have to be set to *numberp* values
 #+begin_src emacs-lisp :tangle yes
 (editorconfig-mode 1)
 #+end_src
+** Plantuml mode
+*** Set jar path
+ #+begin_src emacs-lisp :tangle yes
+ (setq plantuml-jar-path org-plantuml-jar-path)
+ #+end_src
+*** autamatically enable plantuml mode for .uml files
+#+begin_src emacs-lisp :tangle yes
+(add-to-list 'auto-mode-alist '("\\.uml\\'" . plantuml-mode))
+#+end_src
+
 * Custom functions
 ** Hooks
 ** Other functions
@@ -735,4 +829,9 @@ have to be set to *numberp* values
   (defun w32-browser
     (doc)
     (w32-shell-execute 1 doc))
+#+end_src
+** Start up actions
+*** Start Mingus (MPD client)
+#+begin_src emacs-lisp :tangle yes
+ (mingus)
 #+end_src
