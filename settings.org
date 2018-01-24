@@ -520,9 +520,9 @@ _o_ther buffers: %s(my/number-names my/last-buffers)
 #+end_src
 ** Log parameters
 #+begin_src emacs-lisp :tangle yes
-(add-to-list "--graph" magit-log-arguments)
-(add-to-list "--decorate" magit-log-arguments)
-(add-to-list "-n256" magit-log-arguments)
+(add-to-list 'magit-log-arguments  "--graph")
+(add-to-list 'magit-log-arguments "--decorate")
+(add-to-list 'magit-log-arguments "-n256")
 #+end_src
 ** Commit hook setup
 #+begin_src emacs-lisp :tangle yes
