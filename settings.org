@@ -547,7 +547,7 @@ have to be set to *numberp* values
  (setq mingus-mode-line-show-random-and-repeat-status nil)
  (setq mingus-mode-line-show-status nil)
  (setq mingus-mode-line-show-volume nil)
- (setq mingus-mode-line-string-max 180)
+ (setq mingus-mode-line-string-max 280)
 
 #+end_src
 * Programming language modes
@@ -768,9 +768,35 @@ have to be set to *numberp* values
 (add-to-list 'auto-mode-alist '("\\.uml\\'" . plantuml-mode))
 #+end_src
 
+** Vlf (Very large file mode)
+#+begin_src emacs-lisp :tangle yes
+  (add-hook 'vlf-mode-hook
+            (lambda ()
+              (setq buffer-read-only t)
+              (buffer-disable-undo)
+              (font-lock-mode -1)
+              (company-mode 0)
+              (abbrev-mode 0)))
+#+end_src
 * Custom functions
 ** Hooks
+*** Disable some stuff for large files
+#+begin_src emacs-lisp :tangle yes
+(defun my-find-file-check-make-large-file-read-only-hook ()
+  "If a file is over a given size, make the buffer read only."
+  (when (> (buffer-size) (* 1024 1024 10))
+    (my-disable-stuff-for-large-files)
+    (fundamental-mode)))
+
+(add-hook 'find-file-hook 'my-find-file-check-make-large-file-read-only-hook)
+#+end_src
 ** Other functions
+*** Start shell setting shell file name to bash
+#+begin_src emacs-lisp :tangle yes
+  (defun my-bash-on-windows-shell ()
+    (let ((explicit-shell-file-name "C:/Windows/System32/bash.exe"))
+      (shell)))
+#+end_src
 *** Ripgrep through C# files only
 #+begin_src emacs-lisp :tangle yes
   (defun ripgrep-regexp-cs (regexp dir)
@@ -820,12 +846,50 @@ have to be set to *numberp* values
 #+end_src
 *** Open file based on windows extension
 #+begin_src emacs-lisp :tangle yes
-  (defun w32-browser
-    (doc)
+  (defun w32-browser (doc)
     (w32-shell-execute 1 doc))
 #+end_src
-** Start up actions
-*** Start Mingus (MPD client)
+*** Disable some modes for larg files
+#+begin_src emacs-lisp :tangle yes
+  (defun my-disable-stuff-for-large-files ()
+    (setq buffer-read-only t)
+    (buffer-disable-undo)
+    (font-lock-mode -1)
+    (linum-mode -1)
+    (company-mode 0)
+    (abbrev-mode -1))
+#+end_src
+
+* Start up actions
+** Start Mingus (MPD client)
 #+begin_src emacs-lisp :tangle yes
  (mingus)
+#+end_src
+** Start Python
+#+begin_src emacs-lisp :tangle yes
+ (python)
+#+end_src
+
+** Start PowerShell
+#+begin_src emacs-lisp :tangle yes
+ (powershell)
+#+end_src
+
+** Start eshell
+#+begin_src emacs-lisp :tangle yes
+ (eshell)
+#+end_src
+
+** Start bash on windows as shell
+#+begin_src emacs-lisp :tangle yes
+(my-bash-on-windows-shell)
+#+end_src
+** Start dired in Divverence
+#+begin_src emacs-lisp :tangle yes
+ (dired "c:/Divv")
+#+end_src
+
+** Allow Very large file mode to prompt
+#+begin_src emacs-lisp :tangle yes
+ (require 'vlf-setup)
 #+end_src
