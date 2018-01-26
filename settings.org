@@ -793,9 +793,10 @@ have to be set to *numberp* values
 ** Other functions
 *** Start shell setting shell file name to bash
 #+begin_src emacs-lisp :tangle yes
-  (defun my-bash-on-windows-shell ()
+  (defun my-bash-on-windows-shell (arg)
+    (interactive "P")
     (let ((explicit-shell-file-name "C:/Windows/System32/bash.exe"))
-      (shell)))
+      (call-interactively 'shell)))
 #+end_src
 *** Ripgrep through C# files only
 #+begin_src emacs-lisp :tangle yes
