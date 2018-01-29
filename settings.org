@@ -883,7 +883,7 @@ have to be set to *numberp* values
 
 ** Start bash on windows as shell
 #+begin_src emacs-lisp :tangle yes
-(my-bash-on-windows-shell)
+(my-bash-on-windows-shell -1)
 #+end_src
 ** Start dired in Divverence
 #+begin_src emacs-lisp :tangle yes
