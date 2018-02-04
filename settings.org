@@ -65,9 +65,11 @@
     :commands (slime slime-lisp-mode-hook)
     :config
     (add-to-list 'slime-contribs 'slime-fancy)
+    (add-to-list 'slime-contribs 'slime-banner)
+    (add-to-list 'slime-contribs 'slime-repl-ansi-color)
 
     (slime-setup)
-    (add-hook 'slime-repl-mode-hook #'smartparens-strict-mode))
+    (add-hook 'slime-repl-mode-hook #'paredit-mode))
 
   (add-hook 'emacs-lisp-mode-hook #'turn-on-eldoc-mode)
   (add-hook 'emacs-lisp-mode-hook #'elisp-slime-nav-mode)
