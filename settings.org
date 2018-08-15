@@ -409,6 +409,10 @@ _o_ther buffers: %s(my/number-names my/last-buffers)
  #+begin_src emacs-lisp :tangle yes
  (setq ledger-binary-path "C:\\Users\\bas\\PortableApps\\ledger\\ledger.exe")
  #+end_src
+** Enable features enabled by default
+#+begin_src emacs-lisp :tangle yes
+  (put 'dired-find-alternate-file 'disabled nil)
+#+end_src
 * Org mode configuration
 ** Set custom exporters
 *** Confluence
@@ -436,6 +440,7 @@ _o_ther buffers: %s(my/number-names my/last-buffers)
 #+begin_src emacs-lisp :tangle yes
 (setq org-plantuml-jar-path (expand-file-name "~/PortableApps/plantuml/plantuml.jar"))
 (setq org-babel-R-command (expand-file-name "~/Documents/R/R-3.3.1/bin/x64/R.exe --slave --no-save"))
+(setq ob-mermaid-cli-path (expand-file-name "~/.node_modules/mmdc.cmd"))
 #+end_src
 *** Set active Babel languages
 #+begin_src emacs-lisp :tangle yes
@@ -443,6 +448,7 @@ _o_ther buffers: %s(my/number-names my/last-buffers)
  'org-babel-load-languages
  '(
    (plantuml . t)
+   (mermaid . t)
 ;;   (R . t)
    (emacs-lisp . t)
    (sh . t)
@@ -593,6 +599,20 @@ have to be set to *numberp* values
 #+begin_src emacs-lisp :tangle yes
 (setq json-reformat:indent-width 2)
 #+end_src
+** Elixir Alchemist
+*** Setup paths to Elixir tools
+ #+begin_src emacs-lisp :tangle yes
+ (setq elixir-path "/ProgramData/chocolatey/lib/Elixir/bin/")
+ (setq alchemist-mix-command (concat elixir-path "mix"))
+ (setq alchemist-iex-program-name (concat elixir-path "iex"))
+ (setq alchemist-execute-command (concat elixir-path "elixir"))
+ (setq alchemist-compile-command (concat elixir-path "elixirc"))
+ #+end_src
+*** Hooks
+**** Run tests on save
+ #+begin_src emacs-lisp :tangle yes
+(setq alchemist-hooks-test-on-save t)
+ #+end_src
 ** Elm
 *** Hooks
 **** Use oracle for completion
@@ -602,7 +622,7 @@ have to be set to *numberp* values
 ** Rust
 *** Enable format on save
 #+begin_src emacs-lisp :tangle yes
-(add-hook 'rust-mode-hook #'rust-format-on-save)
+(setq rust-format-on-save t)
 #+end_src
 ** TypeScript
 *** Mode hook function
@@ -641,6 +661,22 @@ have to be set to *numberp* values
             (when (string-equal "tsx" (file-name-extension buffer-file-name))
               (setup-tide-mode))))
 #+end_src
+** Julia
+#+begin_src emacs-lisp :tangle yes
+  (add-to-list 'load-path "~/.emacs.d/julia-emacs/")
+  (require 'julia-mode)
+#+end_src
+
+** Mermaid
+#+begin_src emacs-lisp :tangle yes
+  (add-to-list 'load-path "~/.emacs.d/mermaid-mode/")
+  (require 'mermaid-mode)
+  (setq mermaid-output-format 'svg)
+  (setq mermaid-compiler ob-mermaid-cli-path)
+#+end_src
+
+#+RESULTS:
+
 ** Web mode
 *** Enable web-mode for web-ish file types
 #+begin_src emacs-lisp :tangle yes
@@ -673,20 +709,6 @@ have to be set to *numberp* values
              'write-file-functions
              'delete-trailing-whitespace)))
 #+end_src
-** Elixir Alchemist
-*** Setup paths to Elixir tools
- #+begin_src emacs-lisp :tangle yes
- (setq elixir-path "/ProgramData/chocolatey/lib/Elixir/bin/")
- (setq alchemist-mix-command (concat elixir-path "mix"))
- (setq alchemist-iex-program-name (concat elixir-path "iex"))
- (setq alchemist-execute-command (concat elixir-path "elixir"))
- (setq alchemist-compile-command (concat elixir-path "elixirc"))
- #+end_src
-*** Hooks
-**** Run tests on save
- #+begin_src emacs-lisp :tangle yes
-(setq alchemist-hooks-test-on-save t)
- #+end_src
 * Other minor modes
 ** ACE jump mode
 #+begin_src emacs-lisp :tangle yes
@@ -767,6 +789,19 @@ have to be set to *numberp* values
 #+begin_src emacs-lisp :tangle yes
 (add-to-list 'auto-mode-alist '("\\.uml\\'" . plantuml-mode))
 #+end_src
+
+** Mermaid mode
+*** Set tab width to 4 spaces
+#+begin_src emacs-lisp :tangle yes
+  (add-hook 'mermaid-mode-hook
+            (lambda ()
+              (setq tab-width 4)))
+#+end_src
+*** autamatically enable mermaid mode for .mmd files
+#+begin_src emacs-lisp :tangle yes
+  (add-to-list 'auto-mode-alist '("\\.mmd\\'" . plantuml-mode))
+#+end_src
+
 
 ** Vlf (Very large file mode)
 #+begin_src emacs-lisp :tangle yes
