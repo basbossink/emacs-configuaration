@@ -190,15 +190,16 @@ _o_ther buffers: %s(my/number-names my/last-buffers)
    "
         Unicode  _e_ €  _s_ ZERO WIDTH SPACE _c_ ©
                  _f_ ♀  _o_ °   _m_ µ   _p_ ←
-                 _r_ ♂  _a_ →   _t_ η   _l_ 😊
-                 _d_ 👍
+                 _g_ ♂  _r_ →   _t_ η   _l_ 😊
+                 _d_ 👍 _a_ á
         "
    ("e" (my/insert-unicode "EURO SIGN"))
-   ("r" (my/insert-unicode "MALE SIGN"))
+   ("g" (my/insert-unicode "MALE SIGN"))
    ("f" (my/insert-unicode "FEMALE SIGN"))
    ("s" (my/insert-unicode "ZERO WIDTH SPACE"))
    ("o" (my/insert-unicode "DEGREE SIGN"))
-   ("a" (my/insert-unicode "RIGHTWARDS ARROW"))
+   ("a" (my/insert-unicode "LATIN SMALL LETTER A WITH ACUTE"))
+   ("r" (my/insert-unicode "RIGHTWARDS ARROW"))
    ("m" (my/insert-unicode "MICRO SIGN"))
    ("t" (my/insert-unicode "GREEK SMALL LETTER ETA"))
    ("p" (my/insert-unicode "LEFTWARDS ARROW"))
