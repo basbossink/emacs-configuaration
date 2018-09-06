@@ -802,8 +802,10 @@ have to be set to *numberp* values
 #+begin_src emacs-lisp :tangle yes
   (add-to-list 'auto-mode-alist '("\\.mmd\\'" . plantuml-mode))
 #+end_src
-
-
+** Show number of search matches in mode line
+#+begin_src emacs-lisp :tangle yes
+  (global-anzu-mode +1)
+#+end_src
 ** Vlf (Very large file mode)
 #+begin_src emacs-lisp :tangle yes
   (add-hook 'vlf-mode-hook
