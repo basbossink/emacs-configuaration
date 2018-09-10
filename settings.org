@@ -619,6 +619,17 @@ have to be set to *numberp* values
  #+begin_src emacs-lisp :tangle yes
 (setq alchemist-hooks-test-on-save t)
  #+end_src
+**** Add credo flycheck mode to elixir mode
+ #+begin_src emacs-lisp :tangle yes
+(eval-after-load 'flycheck
+  '(flycheck-credo-setup))
+(add-hook 'elixir-mode-hook 'flycheck-mode)
+ #+end_src
+**** Use strict mode when calling credo from flycheck
+ #+begin_src emacs-lisp :tangle yes
+(setq flycheck-elixir-credo-strict t)
+ #+end_src
+
 ** Elm
 *** Hooks
 **** Use oracle for completion
