@@ -191,7 +191,7 @@ _o_ther buffers: %s(my/number-names my/last-buffers)
         Unicode  _e_ €  _s_ ZERO WIDTH SPACE _c_ ©
                  _f_ ♀  _o_ °   _m_ µ   _p_ ←
                  _g_ ♂  _r_ →   _t_ η   _l_ 😊
-                 _d_ 👍 _a_ á
+                 _d_ 👍 _a_ á _i_ Π
         "
    ("e" (my/insert-unicode "EURO SIGN"))
    ("g" (my/insert-unicode "MALE SIGN"))
@@ -202,6 +202,7 @@ _o_ther buffers: %s(my/number-names my/last-buffers)
    ("r" (my/insert-unicode "RIGHTWARDS ARROW"))
    ("m" (my/insert-unicode "MICRO SIGN"))
    ("t" (my/insert-unicode "GREEK SMALL LETTER ETA"))
+   ("i" (my/insert-unicode "GREEK SMALL LETTER PI"))
    ("p" (my/insert-unicode "LEFTWARDS ARROW"))
    ("l" (my/insert-unicode "SMILING FACE WITH SMILING EYES"))
    ("d" (my/insert-unicode "THUMBS UP SIGN"))
