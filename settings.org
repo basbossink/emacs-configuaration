@@ -219,6 +219,10 @@ _o_ther buffers: %s(my/number-names my/last-buffers)
    ("p" (find-file-at-point) "find file at point")
    ("o"  (ido-find-file-other-window) "find file other window")))
 #+end_src
+** Insert todays date in iso format
+#+begin_src emacs-lisp :tangle yes
+  (global-set-key "\C-x\M-d" 'insert-iso-date)
+#+end_src
 * Custom variables
 ** Look and feel
 *** Set default font
@@ -898,6 +902,12 @@ have to be set to *numberp* values
     (linum-mode -1)
     (company-mode 0)
     (abbrev-mode -1))
+#+end_src
+*** Insert date in iso format
+#+begin_src emacs-lisp :tangle yes
+  (defun insert-iso-date ()
+    (interactive)
+    (insert (format-time-string "%Y-%m-%d")))
 #+end_src
 
 * Start up actions
