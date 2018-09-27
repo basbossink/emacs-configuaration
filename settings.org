@@ -223,6 +223,15 @@ _o_ther buffers: %s(my/number-names my/last-buffers)
 #+begin_src emacs-lisp :tangle yes
   (global-set-key "\C-x\M-d" 'insert-iso-date)
 #+end_src
+** Multiple cursors
+#+begin_src emacs-lisp :tangle yes
+(require 'multiple-cursors)
+(global-set-key (kbd "C-S-c C-S-c") 'mc/edit-lines)
+(global-set-key (kbd "C->") 'mc/mark-next-like-this)
+(global-set-key (kbd "C-<") 'mc/mark-previous-like-this)
+(global-set-key (kbd "C-c C-<") 'mc/mark-all-like-this)
+#+end_src
+
 * Custom variables
 ** Look and feel
 *** Set default font
@@ -415,10 +424,19 @@ _o_ther buffers: %s(my/number-names my/last-buffers)
  #+begin_src emacs-lisp :tangle yes
  (setq ledger-binary-path "C:\\Users\\bas\\PortableApps\\ledger\\ledger.exe")
  #+end_src
-** Enable features enabled by default
+** Enable features disabled by default
 #+begin_src emacs-lisp :tangle yes
   (put 'dired-find-alternate-file 'disabled nil)
 #+end_src
+** Use y/n instead of yes/no
+#+begin_src emacs-lisp :tangle yes
+(fset 'yes-or-no-p 'y-or-n-p)
+#+end_src
+** Use empty scratch buffer
+#+begin_src emacs-lisp :tangle yes
+(setq initial-scratch-message nil)
+#+end_src
+
 * Org mode configuration
 ** Set custom exporters
 *** Confluence
@@ -548,9 +566,14 @@ _o_ther buffers: %s(my/number-names my/last-buffers)
 Note that git-commit-fill-column and git-commit-summary-max-length
 have to be set to *numberp* values
 #+begin_src emacs-lisp :tangle yes
-(setq git-commit-fill-column 78)
-(setq-default git-commit-summary-max-length git-commit-fill-column)
+(setq git-commit-fill-column 72)
+(setq-default git-commit-summary-max-length 50)
 #+end_src
+** Use ido to search for branches
+#+begin_src emacs-lisp :tangle yes
+(setq magit-completing-read-function 'magit-ido-completing-read)
+#+end_src
+
 * Mingus (MPD client)
 ** Mode-line configuration
 #+begin_src emacs-lisp :tangle yes
@@ -770,6 +793,14 @@ have to be set to *numberp* values
  'company
  '(add-to-list 'company-backends 'company-omnisharp))
 #+end_src
+**** Enable emojifi backend
+#+begin_src emacs-lisp :tangle yes
+  (require 'company-emoji)
+  (eval-after-load
+   'company
+   '(add-to-list 'company-backends 'company-emoji))
+#+end_src
+
 *** IDO
 **** Initialize
 #+begin_src emacs-lisp :tangle yes
@@ -843,6 +874,17 @@ have to be set to *numberp* values
     (fundamental-mode)))
 
 (add-hook 'find-file-hook 'my-find-file-check-make-large-file-read-only-hook)
+#+end_src
+*** Set fill-column to 180 when editing CHANGELOG.md
+#+begin_src emacs-lisp :tangle yes
+  (defun set-changelog-fill-column-hook ()
+    (when
+        (and
+         (string= (file-name-base buffer-file-name) "CHANGELOG")
+         (string= (file-name-extension buffer-file-name) "md"))
+      (setq fill-column 180)))
+
+  (add-hook 'find-file-hook 'set-changelog-fill-column-hook)
 #+end_src
 ** Other functions
 *** Start shell setting shell file name to bash
