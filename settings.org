@@ -44,7 +44,19 @@ the melpa entry below with:
 #+end_src
 ** Magit
 #+begin_src emacs-lisp :tangle yes
-(global-set-key (kbd "C-x g") 'magit-status)
+  (with-eval-after-load
+      "magit"
+    (progn
+      (global-set-key (kbd "C-x g") 'magit-status)
+      (define-key magit-status-mode-map (kbd "j i") 'magit-gitflow-init)
+      (define-key magit-status-mode-map (kbd "j p") 'magit-gitflow-popup)
+      (define-key magit-status-mode-map (kbd "j f s") 'magit-gitflow-feature-start)
+      (define-key magit-status-mode-map (kbd "j f p") 'magit-gitflow-feature-publish)
+      (define-key magit-status-mode-map (kbd "j f f") 'magit-gitflow-feature-finish)
+      (define-key magit-status-mode-map (kbd "j r s") 'magit-gitflow-release-start)
+      (define-key magit-status-mode-map (kbd "j r p") 'magit-gitflow-release-publish)
+      (define-key magit-status-mode-map (kbd "j r f") 'magit-gitflow-release-finish)))
+
 #+end_src
 ** Discover my major mode
 #+begin_src emacs-lisp :tangle yes
