@@ -243,6 +243,15 @@ _o_ther buffers: %s(my/number-names my/last-buffers)
 (global-set-key (kbd "C-<") 'mc/mark-previous-like-this)
 (global-set-key (kbd "C-c C-<") 'mc/mark-all-like-this)
 #+end_src
+** Open workday end form
+#+begin_src emacs-lisp :tangle yes
+  (global-set-key
+   (kbd "<f9>")
+   (lambda ()
+     (interactive)
+     (forms-find-file-other-window
+      (expand-file-name "~/.emacs.d/forms/workday-end.el"))))
+#+end_src
 
 * Custom variables
 ** Look and feel
