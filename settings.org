@@ -252,6 +252,21 @@ _o_ther buffers: %s(my/number-names my/last-buffers)
      (forms-find-file-other-window
       (expand-file-name "~/.emacs.d/forms/workday-end.el"))))
 #+end_src
+** Open positivity ratio form
+#+begin_src emacs-lisp :tangle yes
+  (global-set-key
+   (kbd "<f7>")
+   (lambda ()
+     (interactive)
+     (forms-find-file-other-window
+      (expand-file-name "~/Dropbox/Personal/journals/positivy-form.el"))))
+#+end_src
+** Open recently visited file
+#+begin_src emacs-lisp :tangle yes
+  (global-set-key
+   (kbd "C-x C-r")
+   'recentf-ido-find-file)
+#+end_src
 
 * Custom variables
 ** Look and feel
@@ -882,6 +897,21 @@ have to be set to *numberp* values
               (company-mode 0)
               (abbrev-mode 0)))
 #+end_src
+** Recent files
+#+begin_src emacs-lisp :tangle yes
+  (require 'recentf)
+  (setq recentf-max-saved-items 200
+        recentf-max-menu-items 15)
+  (recentf-mode +1)
+
+  (defun recentf-ido-find-file ()
+    "Find a recent file using ido."
+    (interactive)
+    (let ((file (ido-completing-read "Choose recent file: " recentf-list nil t)))
+      (when file
+        (find-file file))))
+#+end_src
+
 * Custom functions
 ** Hooks
 *** Disable some stuff for large files
