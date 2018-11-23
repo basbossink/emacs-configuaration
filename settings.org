@@ -647,6 +647,15 @@ have to be set to *numberp* values
   (setq write-file-functions nil))
 (add-hook 'markdown-mode-hook 'turn-off-delete-trailing-whitespace)
 #+end_src
+*** Turn on orgstruct++ mode when using markdown
+#+begin_src emacs-lisp :tangle yes
+(add-hook 'markdown-mode-hook 'orgstruct++-mode)
+#+end_src
+*** Turn on flyspell mode when using markdown
+#+begin_src emacs-lisp :tangle yes
+(add-hook 'markdown-mode-hook 'flyspell-mode)
+#+end_src
+
 ** F#
 *** Initialize
 #+begin_src emacs-lisp :tangle yes
