@@ -127,19 +127,19 @@
   :hook
   (go-mode-hook . (lambda () (auto-complete-mode 1))))
 #+end_src
-*** Go eldoc
+**** Go eldoc
 #+begin_src emacs-lisp :tangle yes
 (use-package go-eldoc
   :ensure t
   :hook (go-mode-hook . go-eldoc-setup))
 #+end_src
-*** Go guru
+**** Go guru
 #+begin_src emacs-lisp :tangle yes
 (use-package go-guru
   :ensure t
   :hook (go-mode-hook . #'go-guru-hl-identifier-mode))
 #+end_src
-*** Go test
+**** Go test
 #+begin_src emacs-lisp :tangle yes
 (use-package gotest
   :ensure t
@@ -238,6 +238,10 @@
 **** Set tab width
 #+begin_src emacs-lisp :tangle yes
 (setq tab-width 2)
+#+end_src
+**** Set indentation styles
+#+begin_src emacs-lisp :tangle yes
+   (setq  c-default-style '((java-mode . "java") (awk-mode . "awk") (other . "stroustrup")))
 #+end_src
 *** Disable use of mark when inactive
 #+begin_src emacs-lisp :tangle yes
