@@ -473,6 +473,11 @@ _o_ther buffers: %s(my/number-names my/last-buffers)
 (setq initial-scratch-message nil)
 #+end_src
 
+* Spaceline
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (require 'spaceline-config)
+  (spaceline-emacs-theme)
+#+END_SRC
 * Org mode configuration
 ** Set custom exporters
 *** Confluence
@@ -619,6 +624,10 @@ have to be set to *numberp* values
  (setq mingus-mode-line-string-max 280)
 
 #+end_src
+* Gnugo
+#+begin_src emacs-lisp :tangle yes
+(setq gnugo-program "c:/Users/bas/PortableApps/gnugo/gnugo.exe")
+#+end_src
 * Programming language modes
 ** C#
 *** Hooks; enable electric pair mode
@@ -706,6 +715,18 @@ have to be set to *numberp* values
 *** Enable format on save
 #+begin_src emacs-lisp :tangle yes
 (setq rust-format-on-save t)
+#+end_src
+*** Enable Racer
+#+begin_src emacs-lisp :tangle yes
+(add-hook 'rust-mode-hook #'racer-mode)
+(add-hook 'racer-mode-hook #'eldoc-mode)
+#+end_src
+*** Enable Compay mode completion with Racer
+#+begin_src emacs-lisp :tangle yes
+(add-hook 'racer-mode-hook #'company-mode)
+(require 'rust-mode)
+(define-key rust-mode-map (kbd "TAB") #'company-indent-or-complete-common)
+(setq company-tooltip-align-annotations t)
 #+end_src
 ** TypeScript
 *** Mode hook function
