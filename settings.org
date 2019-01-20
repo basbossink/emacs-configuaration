@@ -807,7 +807,8 @@ have to be set to *numberp* values
     (setq web-mode-enable-auto-pairing t)
     (setq web-mode-markup-indent-offset 2)
     (setq web-mode-code-indent-offset 2)
-    (setq web-mode-css-indent-offset 2))
+    (setq web-mode-css-indent-offset 2)
+    (set (make-local-variable 'company-backends) '(company-css company-web-html company-yasnippet company-files)))
   (add-hook 'web-mode-hook  'my-web-mode-hook)
 #+end_src
 ** Programming mode hooks
