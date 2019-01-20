@@ -38,9 +38,11 @@ the melpa entry below with:
 #+end_src
 ** Time tracking
 #+begin_src emacs-lisp :tangle yes
-(global-set-key [f10] 'timeclock-in)
-(global-set-key [f11] 'timeclock-out)
-(global-set-key [f12] 'timeclock-interruption)
+  (global-set-key [f10] 'timeclock-in)
+  (global-set-key (kbd "S-<f10>") 'timeclock-change)
+  (global-set-key [f11] 'timeclock-out)
+  (global-set-key [f12] 'timeclock-interruption)
+  (global-set-key (kbd "S-<f12>")'timeclock-visit-timelog)
 #+end_src
 ** Magit
 #+begin_src emacs-lisp :tangle yes
