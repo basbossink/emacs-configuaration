@@ -500,17 +500,9 @@ _o_ther buffers: %s(my/number-names my/last-buffers)
 #+END_SRC
 * Org mode configuration
 ** Set custom exporters
-*** Confluence
-#+begin_src emacs-lisp :tangle yes
-  (require 'ox-confluence)
-#+end_src
 *** Markdown
 #+begin_src emacs-lisp :tangle yes
   (require 'ox-md)
-#+end_src
-*** Groff
-#+begin_src emacs-lisp :tangle yes
-  (require 'ox-groff)
 #+end_src
 *** Man
 #+begin_src emacs-lisp :tangle yes
