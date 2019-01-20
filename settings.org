@@ -619,11 +619,6 @@ have to be set to *numberp* values
 (setq git-commit-fill-column 72)
 (setq-default git-commit-summary-max-length 50)
 #+end_src
-** Use ido to search for branches
-#+begin_src emacs-lisp :tangle yes
-(setq magit-completing-read-function 'magit-ido-completing-read)
-#+end_src
-
 * Mingus (MPD client)
 ** Mode-line configuration
 #+begin_src emacs-lisp :tangle yes
