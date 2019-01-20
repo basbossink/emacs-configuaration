@@ -979,13 +979,6 @@ have to be set to *numberp* values
   (add-hook 'find-file-hook 'set-changelog-fill-column-hook)
 #+end_src
 ** Other functions
-*** Start shell setting shell file name to bash
-#+begin_src emacs-lisp :tangle yes
-  (defun my-bash-on-windows-shell (arg)
-    (interactive "P")
-    (let ((explicit-shell-file-name "C:/Windows/System32/bash.exe"))
-      (call-interactively 'shell)))
-#+end_src
 *** Ripgrep through C# files only
 #+begin_src emacs-lisp :tangle yes
   (defun ripgrep-regexp-cs (regexp dir)
@@ -1075,10 +1068,6 @@ have to be set to *numberp* values
  (eshell)
 #+end_src
 
-** Start bash on windows as shell
-#+begin_src emacs-lisp :tangle yes
-(my-bash-on-windows-shell -1)
-#+end_src
 ** Start dired in Divverence
 #+begin_src emacs-lisp :tangle yes
  (dired "c:/Divv")
