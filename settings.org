@@ -949,6 +949,11 @@ have to be set to *numberp* values
       (when file
         (find-file file))))
 #+end_src
+** Dimmer non active windows
+#+begin_src emacs-lisp :tangle yes
+  (dimmer-mode)
+  (setq dimmer-fraction 0.4)
+#+end_src
 
 * Popup kill ring
 #+BEGIN_SRC emacs-lisp :tangle yes
