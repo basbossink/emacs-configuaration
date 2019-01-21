@@ -954,6 +954,13 @@ have to be set to *numberp* values
   (dimmer-mode)
   (setq dimmer-fraction 0.4)
 #+end_src
+** Smart hungry delete of whitespace
+#+begin_src emacs-lisp :tangle yes
+  (require 'smart-hungry-delete)
+  (smart-hungry-delete-add-default-hooks)
+  (global-set-key (kbd "<backspace>") 'smart-hungry-delete-backward-char)
+  (global-set-key (kbd "C-d") 'smart-hungry-delete-forward-char)
+#+end_src
 
 * Popup kill ring
 #+BEGIN_SRC emacs-lisp :tangle yes
