@@ -454,9 +454,11 @@ _o_ther buffers: %s(my/number-names my/last-buffers)
  #+begin_src emacs-lisp :tangle yes
  (setq find-program (expand-file-name "~/PortableApps/find/bin/find.exe"))
  #+end_src
-**** Set ispell executable to use to Aspell
+**** Set ispell executable to use to Hunspell
  #+begin_src emacs-lisp :tangle yes
- (setq-default ispell-program-name "c:/msys64/mingw64/bin/aspell.exe")
+   (add-to-list 'exec-path "c:/Users/bas/PortableApps/hunspell/bin")
+   (setq-default ispell-program-name "hunspell")
+   (setq ispell-dictionary "en_US")
  #+end_src
 **** Set ledger executable to use
  #+begin_src emacs-lisp :tangle yes
