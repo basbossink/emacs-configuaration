@@ -270,6 +270,12 @@ _o_ther buffers: %s(my/number-names my/last-buffers)
    'recentf-ido-find-file)
 #+end_src
 
+** Use ivy for flyspell correction
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (require 'flyspell-correct-ivy)
+  (define-key flyspell-mode-map (kbd "C-;") 'flyspell-correct-wrapper)
+  (setq flyspell-correct-interface #'flyspell-correct-ivy)
+#+END_SRC
 * Custom variables
 ** Look and feel
 *** Set default font
@@ -817,11 +823,12 @@ have to be set to *numberp* values
 ** Programming mode hooks
 *** Remove trailing whitespace
 #+begin_src emacs-lisp :tangle yes
-(add-hook 'prog-mode-hook
-          (lambda ()
-            (add-to-list
-             'write-file-functions
-             'delete-trailing-whitespace)))
+  (add-hook 'prog-mode-hook
+            (lambda ()
+              (flyspell-prog-mode)
+              (add-to-list
+               'write-file-functions
+               'delete-trailing-whitespace)))
 #+end_src
 * Other minor modes
 ** ACE jump mode
