@@ -1146,7 +1146,8 @@ have to be set to *numberp* values
 
 ** Start dired in Divverence
 #+begin_src emacs-lisp :tangle yes
- (dired "c:/Divv")
+ (dired "F:/")
+ (dired "~")
 #+end_src
 
 ** Allow Very large file mode to prompt
