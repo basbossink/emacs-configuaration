@@ -735,9 +735,13 @@ have to be set to *numberp* values
 (setq fsharp-indent-level 2)
 #+end_src
 ** JSON
-*** Set indent width
+*** Set indent width to 2
 #+begin_src emacs-lisp :tangle yes
 (setq json-reformat:indent-width 2)
+(add-hook 'json-mode-hook
+          (lambda ()
+            (make-local-variable 'js-indent-level)
+            (setq js-indent-level 2)))
 #+end_src
 ** Elixir Alchemist
 *** Setup paths to Elixir tools
