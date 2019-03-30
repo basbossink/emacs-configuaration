@@ -483,6 +483,23 @@ _o_ther buffers: %s(my/number-names my/last-buffers)
 (setq initial-scratch-message nil)
 #+end_src
 
+** Set default browser chrome portable
+#+begin_src emacs-lisp :tangle yes
+  (defun my-browse-url-portable-chrome (url &rest ARGS)
+    "Open URL in a new portable chrome app"
+    (interactive (browse-url-interactive-arg "URL: "))
+    (call-process "c:/Users/bas/PortableApps/PortableApps/GoogleChromePortable/GoogleChromePortable.exe" nil nil nil url))
+  (setq browse-url-browser-function 'my-browse-url-portable-chrome)
+#+end_src
+
+* Dired
+** Hide dot files by default
+#+begin_src emacs-lisp :tangle yes
+  (require 'dired-x)
+  (setq-default dired-omit-files-p t) ; Buffer-local variable
+  (setq dired-omit-files (concat dired-omit-files "\\|^\\..+$"))
+#+end_src
+
 * Spaceline
 #+BEGIN_SRC emacs-lisp :tangle yes
   (require 'spaceline-config)
