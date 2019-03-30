@@ -528,12 +528,25 @@ _o_ther buffers: %s(my/number-names my/last-buffers)
 ** Set custom exporters
 *** Markdown
 #+begin_src emacs-lisp :tangle yes
-  (require 'ox-md)
+(with-eval-after-load 'ox
+  (require 'ox-md))
 #+end_src
 *** Man
 #+begin_src emacs-lisp :tangle yes
-  (require 'ox-man)
+(with-eval-after-load 'ox
+  (require 'ox-man))
 #+end_src
+*** Confluence
+#+begin_src emacs-lisp :tangle yes
+(with-eval-after-load 'ox
+  (require 'ox-confluence))
+#+end_src
+*** Jira
+#+begin_src emacs-lisp :tangle yes
+(with-eval-after-load 'ox
+  (require 'ox-jira))
+#+end_src
+
 ** Set auto fill mode for org mode files
 #+begin_src emacs-lisp :tangle yes
 (add-hook 'org-mode-hook 'auto-fill-mode)
