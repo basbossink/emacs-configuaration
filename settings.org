@@ -525,27 +525,33 @@ _o_ther buffers: %s(my/number-names my/last-buffers)
 
 #+END_SRC
 * Org mode configuration
-** Set custom exporters
-*** Markdown
-#+begin_src emacs-lisp :tangle yes
-(with-eval-after-load 'ox
-  (require 'ox-md))
-#+end_src
-*** Man
-#+begin_src emacs-lisp :tangle yes
-(with-eval-after-load 'ox
-  (require 'ox-man))
-#+end_src
-*** Confluence
-#+begin_src emacs-lisp :tangle yes
-(with-eval-after-load 'ox
-  (require 'ox-confluence))
-#+end_src
-*** Jira
-#+begin_src emacs-lisp :tangle yes
-(with-eval-after-load 'ox
-  (require 'ox-jira))
-#+end_src
+** Export
+** Fix beamer hyper setup
+ #+begin_src emacs-lisp :tangle yes
+   (customize-set-value 'org-latex-with-hyperref nil)
+   (add-to-list 'org-latex-default-packages-alist "\\PassOptionsToPackage{hyphens}{url}")
+ #+end_src
+*** Set custom exporters
+**** Markdown
+ #+begin_src emacs-lisp :tangle yes
+ (with-eval-after-load 'ox
+   (require 'ox-md))
+ #+end_src
+**** Man
+ #+begin_src emacs-lisp :tangle yes
+ (with-eval-after-load 'ox
+   (require 'ox-man))
+ #+end_src
+**** Confluence
+ #+begin_src emacs-lisp :tangle yes
+ (with-eval-after-load 'ox
+   (require 'ox-confluence))
+ #+end_src
+**** Jira
+ #+begin_src emacs-lisp :tangle yes
+ (with-eval-after-load 'ox
+   (require 'ox-jira))
+ #+end_src
 
 ** Set auto fill mode for org mode files
 #+begin_src emacs-lisp :tangle yes
@@ -557,6 +563,7 @@ _o_ther buffers: %s(my/number-names my/last-buffers)
 (setq org-plantuml-jar-path (expand-file-name "~/PortableApps/plantuml/plantuml.jar"))
 (setq org-babel-R-command (expand-file-name "~/Documents/R/R-3.3.1/bin/x64/R.exe --slave --no-save"))
 (setq ob-mermaid-cli-path (expand-file-name "~/.node_modules/mmdc.cmd"))
+(setq org-babel-python-command  "C:/tools/miniconda3/python.exe")
 #+end_src
 *** Set active Babel languages
 #+begin_src emacs-lisp :tangle yes
@@ -564,6 +571,7 @@ _o_ther buffers: %s(my/number-names my/last-buffers)
  'org-babel-load-languages
  '(
    (plantuml . t)
+   (python . t)
    (mermaid . t)
    (emacs-lisp . t)
    (dot . t)
@@ -575,6 +583,13 @@ _o_ther buffers: %s(my/number-names my/last-buffers)
 (setq org-confirm-babel-evaluate nil)
 (setq org-pretty-entities t)
 (setq org-export-with-sub-superscripts nil)
+(require 'ox-latex)
+(add-to-list 'org-latex-packages-alist '("" "minted"))
+(setq org-latex-listings 'minted)
+(setq org-latex-pdf-process
+      '("pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"
+        "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"
+        "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"))
 #+end_src
 ** Make yasnippets and org-mode work together
 #+begin_src emacs-lisp :tangle yes
@@ -616,6 +631,14 @@ _o_ther buffers: %s(my/number-names my/last-buffers)
   (timeclock-out "Interruption")
   (timeclock-in 0 "Interruption" nil))
 #+end_src
+** Set epresent-run hook
+#+begin_src emacs-lisp :tangle yes
+  (add-hook 'epresent-start-presentation-hook
+            (lambda ()
+              (global-display-line-numbers-mode -1)
+              (global-linum-mode -1)))
+#+end_src
+
 * Magit
 ** Initialize
 *** Set Log margin format before magit loads
@@ -637,9 +660,10 @@ _o_ther buffers: %s(my/number-names my/last-buffers)
 (require 'ssh-agency)
 (setenv "SSH_ASKPASS" "git-gui--askpass")
 #+end_src
-** Log parameters
-#+begin_src emacs-lisp :tangle yes
-(add-to-list 'magit-log-arguments  "--graph")
+** Log parameters 
+Disabled, see [[https://github.com/magit/magit/commit/4641aa07e0b1f4654fceb139a36b160d594d7846][Magit log arguments refactoring]]
+#+begin_src emacs-lisp :tangle no
+(add-to-list 'magit-log-arguments "--graph")
 (add-to-list 'magit-log-arguments "--decorate")
 (add-to-list 'magit-log-arguments "-n256")
 #+end_src
@@ -711,17 +735,24 @@ have to be set to *numberp* values
 #+end_src
 *** Disable removal of trailing whitespace
 #+begin_src emacs-lisp :tangle yes
-(defun turn-off-delete-trailing-whitespace ()
-  (setq write-file-functions nil))
-(add-hook 'markdown-mode-hook 'turn-off-delete-trailing-whitespace)
+  (defun turn-off-delete-trailing-whitespace ()
+    (message "Turning of removal of trailing whitespace in Markdown mode.")
+    (setq write-file-functions (delete 'delete-trailing-whitespace write-file-functions)))
+  (add-hook 'markdown-mode-hook 'turn-off-delete-trailing-whitespace)
 #+end_src
-*** Turn on orgstruct++ mode when using markdown
-#+begin_src emacs-lisp :tangle yes
+*** Turn on orgstruct++ mode when using markdown > disabled
+#+begin_src emacs-lisp :tangle no
 (add-hook 'markdown-mode-hook 'orgstruct++-mode)
 #+end_src
 *** Turn on flyspell mode when using markdown
 #+begin_src emacs-lisp :tangle yes
 (add-hook 'markdown-mode-hook 'flyspell-mode)
+#+end_src
+
+** Clojure
+*** CIDER default repl disabled
+#+begin_src emacs-lisp :tangle no
+(setq cider-jack-in-default 'boot)
 #+end_src
 
 ** F#
