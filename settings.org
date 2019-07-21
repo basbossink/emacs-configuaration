@@ -833,6 +833,7 @@ have to be set to *numberp* values
 (add-hook 'rust-mode-hook #'lsp)
 (setq lsp-prefer-flymake nil)
 (add-hook 'rust-mode-hook 'flycheck-mode)
+(add-hook 'rust-mode-hook 'cargo-minor-mode)
 #+end_src
 *** Use dap debugging
 #+begin_src emacs-lisp :tangle yes
