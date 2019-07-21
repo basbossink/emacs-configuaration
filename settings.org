@@ -55,7 +55,7 @@ the melpa entry below with:
       (define-key magit-status-mode-map (kbd "j f s") 'magit-gitflow-feature-start)
       (define-key magit-status-mode-map (kbd "j f p") 'magit-gitflow-feature-publish)
       (define-key magit-status-mode-map (kbd "j f f") 'magit-gitflow-feature-finish)
-      (define-key magit-status-mode-map (kbd "j f r") '(lambda () (interactive) (start-process "RUN" "RUN" "pr" "develop")))
+      (define-key magit-status-mode-map (kbd "j f r") '(lambda () (interactive) (start-process "pr" "*Create pull request*" "pr" "develop")))
       (define-key magit-status-mode-map (kbd "j r s") 'magit-gitflow-release-start)
       (define-key magit-status-mode-map (kbd "j r p") 'magit-gitflow-release-publish)
       (define-key magit-status-mode-map (kbd "j r f") 'magit-gitflow-release-finish)))
