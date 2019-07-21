@@ -660,7 +660,7 @@ _o_ther buffers: %s(my/number-names my/last-buffers)
 (require 'ssh-agency)
 (setenv "SSH_ASKPASS" "git-gui--askpass")
 #+end_src
-** Log parameters 
+** Log parameters
 Disabled, see [[https://github.com/magit/magit/commit/4641aa07e0b1f4654fceb139a36b160d594d7846][Magit log arguments refactoring]]
 #+begin_src emacs-lisp :tangle no
 (add-to-list 'magit-log-arguments "--graph")
@@ -806,22 +806,42 @@ have to be set to *numberp* values
 (add-hook 'elm-mode-hook #'elm-oracle-setup-completion)
 #+end_src
 ** Rust
+*** Use rust language server
+#+begin_src emacs-lisp :tangle yes
+(require 'lsp-mode)
+(require 'lsp-ui)
+(add-hook 'rust-mode-hook #'lsp)
+(setq lsp-prefer-flymake nil)
+(add-hook 'rust-mode-hook 'flycheck-mode)
+#+end_src
+*** Use dap debugging
+#+begin_src emacs-lisp :tangle yes
+(require 'dap-mode)
+(dap-mode 1)
+(dap-ui-mode 1)
+#+end_src
 *** Enable format on save
 #+begin_src emacs-lisp :tangle yes
 (setq rust-format-on-save t)
 #+end_src
-*** Enable Racer
+*** Enable eldoc mode
 #+begin_src emacs-lisp :tangle yes
-(add-hook 'rust-mode-hook #'racer-mode)
-(add-hook 'racer-mode-hook #'eldoc-mode)
+(add-hook 'rust-mode-hook #'eldoc-mode)
 #+end_src
-*** Enable Compay mode completion with Racer
+*** Enable Compay mode completion with Rust
 #+begin_src emacs-lisp :tangle yes
-(add-hook 'racer-mode-hook #'company-mode)
+(add-hook 'rust-mode-hook #'company-mode)
+(require 'company-lsp)
+(push 'company-lsp company-backends)
 (require 'rust-mode)
 (define-key rust-mode-map (kbd "TAB") #'company-indent-or-complete-common)
 (setq company-tooltip-align-annotations t)
 #+end_src
+*** Set tab width to 4
+#+begin_src emacs-lisp :tangle yes
+(add-hook 'rust-mode-hook (lambda () (setq-local tab-width 4))
+#+end_src
+
 ** TypeScript
 *** Mode hook function
 #+begin_src emacs-lisp :tangle yes
@@ -899,6 +919,20 @@ have to be set to *numberp* values
     (set (make-local-variable 'company-backends) '(company-css company-web-html company-yasnippet company-files)))
   (add-hook 'web-mode-hook  'my-web-mode-hook)
 #+end_src
+** Language Server Keybindings
+#+begin_src emacs-lisp :tangle yes
+  (with-eval-after-load
+      "lsp-ui"
+    (progn
+      (define-key lsp-ui-mode-map (kbd "M-,") 'lsp-ui-peek-find-definitions)
+      (define-key lsp-ui-mode-map (kbd "M-RET") 'lsp-ui-sideline-apply-code-actions)
+      (define-key lsp-ui-mode-map (kbd "M-?") 'lsp-ui-peek-find-references)))
+  (with-eval-after-load
+      "lsp"
+    (progn
+      (define-key lsp-mode-map (kbd "C-c C-a") 'lsp-rename)))
+#+end_src
+
 ** Programming mode hooks
 *** Remove trailing whitespace
 #+begin_src emacs-lisp :tangle yes
