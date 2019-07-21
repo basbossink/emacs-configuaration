@@ -374,7 +374,7 @@ _o_ther buffers: %s(my/number-names my/last-buffers)
 ** Timetracking
 *** Set timelog file
 #+begin_src emacs-lisp :tangle yes
-  (setq timeclock-file (expand-file-name "~/Dropbox/Personal/journals/timelog"))
+  (setq timeclock-file (expand-file-name "F:/Dropbox/Personal/journals/timelog"))
 #+end_src
 ** Ledger
 *** Enable version check
@@ -452,23 +452,23 @@ _o_ther buffers: %s(my/number-names my/last-buffers)
  #+begin_src emacs-lisp :tangle yes
  (setq exec-path
        (cons
-        (expand-file-name "~/PortableApps/find/bin")
-        (cons (expand-file-name "~/PortableApps/find/libexec")
-              (cons (expand-file-name "~/PortableApps/diffutils/bin") exec-path))))
+        "F/PortableApps/find/bin"
+        (cons "F:/PortableApps/find/libexec"
+              (cons "F:/PortableApps/diffutils/bin" exec-path))))
  #+end_src
 **** Set find executable
  #+begin_src emacs-lisp :tangle yes
- (setq find-program (expand-file-name "~/PortableApps/find/bin/find.exe"))
+ (setq find-program "F:/PortableApps/find/bin/find.exe")
  #+end_src
 **** Set ispell executable to use to Hunspell
  #+begin_src emacs-lisp :tangle yes
-   (add-to-list 'exec-path "c:/Users/bas/PortableApps/hunspell/bin")
+   (add-to-list 'exec-path "F:/PortableApps/hunspell/bin")
    (setq-default ispell-program-name "hunspell")
    (setq ispell-dictionary "en_US")
  #+end_src
 **** Set ledger executable to use
  #+begin_src emacs-lisp :tangle yes
- (setq ledger-binary-path "C:\\Users\\bas\\PortableApps\\ledger\\ledger.exe")
+ (setq ledger-binary-path "F:/PortableApps/ledger/ledger.exe")
  #+end_src
 ** Enable features disabled by default
 #+begin_src emacs-lisp :tangle yes
@@ -560,7 +560,7 @@ _o_ther buffers: %s(my/number-names my/last-buffers)
 ** Babel
 *** Paths for interpreters
 #+begin_src emacs-lisp :tangle yes
-(setq org-plantuml-jar-path (expand-file-name "~/PortableApps/plantuml/plantuml.jar"))
+(setq org-plantuml-jar-path "F:/PortableApps/plantuml/plantuml.jar")
 (setq org-babel-R-command (expand-file-name "~/Documents/R/R-3.3.1/bin/x64/R.exe --slave --no-save"))
 (setq ob-mermaid-cli-path (expand-file-name "~/.node_modules/mmdc.cmd"))
 (setq org-babel-python-command  "C:/tools/miniconda3/python.exe")
@@ -609,7 +609,7 @@ _o_ther buffers: %s(my/number-names my/last-buffers)
 #+end_src
 ** Set up files to include in agenda
 #+begin_src emacs-lisp :tangle yes
-(setq org-agenda-files (mapcar (lambda (f) (expand-file-name (concat "~/Dropbox/Personal/journals/" f))) '("2017.org" "divverence.org")))
+(setq org-agenda-files (mapcar (lambda (f) (expand-file-name (concat "F:/Dropbox/Personal/journals/" f))) '("2017.org" "divverence.org")))
 #+end_src
 * Time tracking
 #+begin_src emacs-lisp :tangle yes
@@ -695,7 +695,7 @@ have to be set to *numberp* values
 #+end_src
 * Gnugo
 #+begin_src emacs-lisp :tangle yes
-(setq gnugo-program "c:/Users/bas/PortableApps/gnugo/gnugo.exe")
+(setq gnugo-program "F:/PortableApps/gnugo/gnugo.exe")
 #+end_src
 * Lilypond
 ** Add lilypond dir to load path
