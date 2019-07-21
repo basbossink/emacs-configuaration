@@ -50,6 +50,8 @@ the melpa entry below with:
       "magit"
     (progn
       (global-set-key (kbd "C-x g") 'magit-status)
+      (define-key magit-status-mode-map (kbd "j a") '(lambda () (interactive) (start-process "gitk" nil "gitk" "--all")))
+      (define-key magit-status-mode-map (kbd "j p") '(lambda () (interactive) (shell-command "rg -g *.csproj \"<PackageReference\\s+Include=\\\"([^^\\\"]+)\\\"\\s+Version=\\\"([^^\\\"]+)\\\"\\s*/>\" -r \"$1 : $2\" --heading"  "*Package References*" "*Package References Errors*")))
       (define-key magit-status-mode-map (kbd "j i") 'magit-gitflow-init)
       (define-key magit-status-mode-map (kbd "j p") 'magit-gitflow-popup)
       (define-key magit-status-mode-map (kbd "j f s") 'magit-gitflow-feature-start)
