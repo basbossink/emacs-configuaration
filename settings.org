@@ -499,6 +499,24 @@ _o_ther buffers: %s(my/number-names my/last-buffers)
   (setq-default dired-omit-files-p t) ; Buffer-local variable
   (setq dired-omit-files (concat dired-omit-files "\\|^\\..+$"))
 #+end_src
+** Load dired all the icons
+#+begin_src emacs-lisp :tangle yes
+(add-hook 'dired-mode-hook 'all-the-icons-dired-mode)
+#+end_src
+** Dired subtree
+#+begin_src emacs-lisp :tangle yes
+  (require 'dired-subtree)
+  (define-key dired-mode-map (kbd "<tab>") 'dired-subtree-toggle)
+  (define-key dired-mode-map (kbd "<backtab>") 'dired-subtree-cycle)
+#+end_src
+** Dired narrow
+#+begin_src emacs-lisp :tangle yes
+  (require 'dired-narrow)
+  (add-hook 'dired-mode-hook 'dired-narrow-mode)
+  (define-key dired-mode-map (kbd "C-c C-n") 'dired-narrow)
+  (define-key dired-mode-map (kbd "C-c C-f") 'dired-narrow-fuzzy)
+  (define-key dired-mode-map (kbd "C-c C-r") 'dired-narrow-regex)
+#+end_src
 
 * Spaceline
 #+BEGIN_SRC emacs-lisp :tangle yes
