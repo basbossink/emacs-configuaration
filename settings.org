@@ -47,10 +47,16 @@
   :ensure t
   :init (global-flycheck-mode))
 #+end_src
+** diminsh
+#+begin_src emacs-lisp :tangle yes
+(use-package diminish
+  :ensure t)
+#+end_src
+
 ** Programming language modes
 *** Lisp
 **** SLIME
-#+begin_src emacs-lisp :tangle yes
+#+begin_src emacs-lisp :tangle no
 (use-package lisp-mode
   :config
   (use-package elisp-slime-nav
@@ -151,6 +157,7 @@
          ("C-x C-t x" . go-run)))
 
 #+end_src
+
 * Custom variables
 ** Use y and n always
 #+begin_src emacs-lisp :tangle yes
@@ -297,9 +304,7 @@
  'org-babel-load-languages
  '(
    (plantuml . t)
-;;   (R . t)
    (emacs-lisp . t)
-   (sh . t)
    (dot . t)
    (ditaa . t)
    ))
@@ -339,7 +344,7 @@
 (require 'magit)
 #+end_src
 ** Log parameters
-#+begin_src emacs-lisp :tangle yes
+#+begin_src emacs-lisp :tangle no
 (if (not (member "--graph" magit-log-arguments))
    (add-to-list "--graph" magit-log-arguments))
 #+end_src
@@ -407,17 +412,10 @@ have to be set to *numberp* values
     (setq ac-dwim  t)
     (setq ac-fuzzy-enable t)
 
-    (use-package ac-dabbrev
-      :ensure t
-      :config
-      (progn
-        (add-to-list 'ac-sources 'ac-source-dabbrev)))
-
     (setq ac-modes '(emacs-lisp-mode
                      lisp-mode
                      go-mode
-                     lisp-interaction-mode
-                     slime-repl-mode))))
+                     lisp-interaction-mode))))
 #+end_src
 ** Eldoc (elisp documentation in message buffer)
 #+begin_src emacs-lisp :tangle yes
