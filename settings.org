@@ -465,9 +465,13 @@ _o_ther buffers: %s(my/number-names my/last-buffers)
  #+end_src
 **** Set ispell executable to use to Hunspell
  #+begin_src emacs-lisp :tangle yes
-   (add-to-list 'exec-path "F:/PortableApps/hunspell/bin")
+   (add-to-list 'exec-path "C:/ProgramData/chocolatey/bin/")
    (setq-default ispell-program-name "hunspell")
-   (setq ispell-dictionary "en_US")
+   (setq ispell-local-dictionary "en_US")
+   (setq ispell-hunspell-dict-paths-alist
+         '(("en_US" "c:/Hunspell/en_US.aff")))
+   (setq ispell-local-dictionary-alist
+         '(("en_US" "[[:alpha:]]" "[^[:alpha:]]" "[']" nil ("-d" "en_US" "-i" "utf-8") nil utf-8)))
  #+end_src
 **** Set ledger executable to use
  #+begin_src emacs-lisp :tangle yes
