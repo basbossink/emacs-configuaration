@@ -491,7 +491,7 @@ _o_ther buffers: %s(my/number-names my/last-buffers)
   (defun my-browse-url-portable-chrome (url &rest ARGS)
     "Open URL in a new portable chrome app"
     (interactive (browse-url-interactive-arg "URL: "))
-    (call-process "c:/Users/bas/PortableApps/PortableApps/GoogleChromePortable/GoogleChromePortable.exe" nil nil nil url))
+    (call-process "C:/Program Files (x86)/Google/Chrome/Application/chrome.exe" nil nil nil url))
   (setq browse-url-browser-function 'my-browse-url-portable-chrome)
 #+end_src
 
