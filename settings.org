@@ -525,6 +525,17 @@ _o_ther buffers: %s(my/number-names my/last-buffers)
   (define-key dired-mode-map (kbd "C-c C-r") 'dired-narrow-regex)
 #+end_src
 
+* Evil
+** Customize preferences
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (require 'evil)
+  (add-to-list 'evil-emacs-state-modes 'mingus-playlist)
+  (add-to-list 'evil-emacs-state-modes 'mingus-browse)
+#+END_SRC
+** Enable Evil
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (evil-mode 1)
+#+END_SRC
 * Spaceline
 #+BEGIN_SRC emacs-lisp :tangle yes
   (require 'spaceline-config)
