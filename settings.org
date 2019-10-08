@@ -528,7 +528,7 @@ _o_ther buffers: %s(my/number-names my/last-buffers)
 * Spaceline
 #+BEGIN_SRC emacs-lisp :tangle yes
   (require 'spaceline-config)
-  (spaceline-emacs-theme)
+  (spaceline-spacemacs-theme)
 #+END_SRC
 * Ivy, Counsel, swiper
 #+BEGIN_SRC emacs-lisp :tangle yes
