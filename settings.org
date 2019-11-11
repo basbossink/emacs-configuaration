@@ -616,6 +616,14 @@ _o_ther buffers: %s(my/number-names my/last-buffers)
    (ditaa . t)
    ))
 #+end_src
+*** Configure Clojure
+#+begin_src emacs-lisp :tangle yes
+(require 'org)
+(require 'ob-clojure)
+(setq org-babel-clojure-backend 'cider)
+(require 'cider)
+
+#+end_src
 ** Set org mode preference variables
 #+begin_src emacs-lisp :tangle yes
 (setq org-confirm-babel-evaluate nil)
@@ -696,7 +704,9 @@ _o_ther buffers: %s(my/number-names my/last-buffers)
 #+begin_src emacs-lisp :tangle yes
 (add-to-list 'load-path "~/.emacs.d/ssh-agency")
 (require 'ssh-agency)
-(setenv "SSH_ASKPASS" "git-gui--askpass")
+(setq ssh-agency-bin-dir "C:/Windows/System32/OpenSSH")
+(setq ssh-agency-add-executable "C:/Windows/System32/OpenSSH/ssh-add.exe")
+(setq ssh-agency-agent-executable "C:/Windows/System32/OpenSSH/ssh-agent.exe")
 #+end_src
 ** Log parameters
 Disabled, see [[https://github.com/magit/magit/commit/4641aa07e0b1f4654fceb139a36b160d594d7846][Magit log arguments refactoring]]
